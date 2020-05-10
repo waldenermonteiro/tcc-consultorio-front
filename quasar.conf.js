@@ -12,16 +12,10 @@ module.exports = function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
-    boot: [
-
-      'i18n',
-      'axios'
-    ],
+    boot: ['i18n', 'axios', 'baseVuex', 'notify-message', 'vuelidate'],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: [
-      'app.sass'
-    ],
+    css: ['app.sass'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -62,17 +56,51 @@ module.exports = function (/* ctx */) {
         'QBtn',
         'QIcon',
         'QList',
+        'QExpansionItem',
         'QItem',
         'QItemSection',
-        'QItemLabel'
+        'QItemLabel',
+        'QDialog',
+        'QCard',
+        'QCardSection',
+        'QCardActions',
+        'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
+        'QSpace',
+        'QInput',
+        'QToggle',
+        'QSeparator',
+        'QSelect',
+        'QSlider',
+        'QOptionGroup',
+        'QInnerLoading',
+        'QSpinnerTail',
+        'QCheckbox',
+        'QBtnDropdown',
+        'QFooter',
+        'QBreadcrumbs',
+        'QBreadcrumbsEl',
+        'QImg',
+        'QAvatar',
+        'QScrollArea',
+        'QRadio',
+        'QDate',
+        'QPopupProxy',
+        'QStepper',
+        'QStep',
+        'QStepperNavigation',
+        'QField',
+        'QTooltip',
+        'QUploader',
+        'QChip'
       ],
 
-      directives: [
-        'Ripple'
-      ],
+      directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify', 'Dialog', 'Loading']
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
@@ -186,13 +214,11 @@ module.exports = function (/* ctx */) {
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
         // osxSign: '',
         // protocol: 'myapp://path',
-
         // Windows only
         // win32metadata: { ... }
       },
