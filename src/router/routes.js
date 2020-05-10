@@ -1,10 +1,10 @@
-
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Index.vue') },
+      { path: '/perfis', component: () => import('pages/profiles/List.vue'), meta: { name: 'Configurações / Perfis', icons: 'settings / person' } }
     ]
   }
 ]
