@@ -21,12 +21,42 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered content-class="bg-grey-1">
-      <q-list>
-        <q-item-label header class="text-grey-8">
-          Essential Links
-        </q-item-label>
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="250" content-class="bg-grey-1">
+      <q-list class="img-background">
+        <q-item clickable to="/" exact active-class="text-blue-10">
+          <q-item-section avatar>
+            <q-icon name="home" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Inicio</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-expansion-item icon="settings" label="Configurações" link :header-inset-level="0" :content-inset-level="0.2">
+          <q-item clickable to="/perfis" exact active-class="text-blue-10">
+            <q-item-section avatar>
+              <q-icon name="person" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Perfis</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable to="/especialidades" exact active-class="text-blue-10">
+            <q-item-section avatar>
+              <q-icon name="star" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Especialidades</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item clickable to="/tiposExames" exact active-class="text-blue-10">
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Tipos de Exames</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
       </q-list>
     </q-drawer>
 
@@ -37,60 +67,23 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink'
-
 export default {
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
   data () {
     return {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Docs',
+          title: 'Perfils',
           caption: 'quasar.dev',
           icon: 'school',
-          link: 'https://quasar.dev'
+          link: '/perfis'
         },
         {
-          title: 'Github',
+          title: 'Especialidades',
           caption: 'github.com/quasarframework',
           icon: 'code',
-          link: 'https://github.com/quasarframework'
-        },
-        {
-          title: 'Discord Chat Channel',
-          caption: 'chat.quasar.dev',
-          icon: 'chat',
-          link: 'https://chat.quasar.dev'
-        },
-        {
-          title: 'Forum',
-          caption: 'forum.quasar.dev',
-          icon: 'record_voice_over',
-          link: 'https://forum.quasar.dev'
-        },
-        {
-          title: 'Twitter',
-          caption: '@quasarframework',
-          icon: 'rss_feed',
-          link: 'https://twitter.quasar.dev'
-        },
-        {
-          title: 'Facebook',
-          caption: '@QuasarFramework',
-          icon: 'public',
-          link: 'https://facebook.quasar.dev'
-        },
-        {
-          title: 'Quasar Awesome',
-          caption: 'Community Quasar projects',
-          icon: 'favorite',
-          link: 'https://awesome.quasar.dev'
+          link: '/perfis'
         }
       ]
     }
