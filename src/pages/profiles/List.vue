@@ -18,8 +18,8 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn size="xs" dense color="secondary" title="editar" icon="edit" class="q-mr-sm" @click="updateProfile(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" title="excluir" icon="delete" @click="removeProfile(props.row)"></q-btn>
+            <q-btn size="xs" dense color="secondary" :title="'Editar perfil ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateProfile(props.row)"></q-btn>
+            <q-btn size="xs" dense color="negative" :title="'Excluir perfil ' + props.row.name" icon="delete" @click="removeProfile(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
