@@ -2,7 +2,7 @@
   <q-dialog v-model="showModal" persistent>
     <q-card style="width: 300px; max-width: 80vw;">
       <q-toolbar class="bg-toolbar-custom">
-        <q-toolbar-title class="text-h6 text-center q-ml-xl">Cadastrar Perfil</q-toolbar-title>
+        <q-toolbar-title class="text-h6 text-center q-ml-xl">{{ verifyTypeAction() + " Perfil" }}</q-toolbar-title>
         <q-btn flat round icon="close" size="sm" @click="showModal = false"></q-btn>
       </q-toolbar>
       <q-card-section class="row items-center">
@@ -56,6 +56,9 @@ export default {
     },
     resetForm () {
       this.form = { ...this.formCopy }
+    },
+    verifyTypeAction () {
+      return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     save () {
       this.verifiyValidations()
