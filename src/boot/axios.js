@@ -4,7 +4,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 
 const HTTPClient = axios.create({
-//   baseURL: `${process.env.API}`,
+  baseURL: 'http://127.0.0.1:3333/api/v1/',
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
 })
 
