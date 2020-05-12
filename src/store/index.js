@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Employees from '../pages/employees/store'
 import Medicaments from '../pages/medicaments/store'
 import Profiles from '../pages/profiles/store'
 import Specialities from '../pages/specialities/store'
@@ -9,6 +10,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
+      Employees,
       Medicaments,
       Profiles,
       Specialities,
