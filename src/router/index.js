@@ -26,5 +26,26 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  const verifyUserIsLogged = () => true
+  const verifyRolesToUser = (to, next, roles) => {
+    for (let index = 0; index < roles.length; index++) {
+      if (to.matched.some(record => record.meta.roles === roles[index])) {
+        next()
+        return
+      }
+    }
+    next('/')
+  }
+  const recoverRoles = () => {
+    const data = JSON.parse(localStorage.getItem('data_travessia_admin'))
+    const roles = data === null ? ['admin'] : data.role
+    roles.push('all')
+    return roles
+  }
+  Router.beforeEach((to, from, next) => {
+    const roles = recoverRoles()
+    verifyUserIsLogged() === true ? verifyRolesToUser(to, next, roles) : next()
+  })
+
   return Router
 }

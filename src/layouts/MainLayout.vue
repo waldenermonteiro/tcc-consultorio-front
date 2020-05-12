@@ -32,34 +32,17 @@
           </q-item-section>
         </q-item>
         <q-expansion-item icon="settings" label="Configurações" link :header-inset-level="0" :content-inset-level="0.2">
-          <q-item clickable to="/perfis" exact active-class="text-blue-10">
+          <q-item v-for="route in routes" :key="route.id" clickable :to="route.path" exact active-class="text-blue-10" v-show="verifyProfile(route.path)">
             <q-item-section avatar>
-              <q-icon name="person" />
+              <q-icon :name="route.meta.icons.split(' / ')[1]" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Perfis</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable to="/especialidades" exact active-class="text-blue-10">
-            <q-item-section avatar>
-              <q-icon name="star" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Especialidades</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable to="/tiposExames" exact active-class="text-blue-10">
-            <q-item-section avatar>
-              <q-icon name="home" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Tipos de Exames</q-item-label>
+              <q-item-label>{{ route.name }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-expansion-item>
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -72,20 +55,7 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Perfils',
-          caption: 'quasar.dev',
-          icon: 'school',
-          link: '/perfis'
-        },
-        {
-          title: 'Especialidades',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: '/perfis'
-        }
-      ]
+      routes: this.$router.options.routes[0].children
     }
   },
   methods: {
@@ -100,6 +70,16 @@ export default {
         })
       })
       return arr
+    },
+    verifyProfile (routeItem) {
+      const profile = 'admin'
+      for (const route of this.routes) {
+        if (route.path === routeItem) {
+          if (route.meta.roles === profile) return true
+          return false
+        }
+      }
+      return true
     }
   }
 }
