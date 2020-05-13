@@ -36,6 +36,11 @@
             {{ props.row.specialitie.name }}
           </q-td>
         </template>
+            <template v-slot:body-cell-profile="props">
+          <q-td key="profile" :props="props">
+            {{ props.row.user.profile.name }}
+          </q-td>
+        </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
             <q-btn size="xs" dense color="secondary" :title="'Editar funcionário ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateEmployee(props.row)"></q-btn>
