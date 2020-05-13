@@ -94,7 +94,8 @@ module.exports = function (/* ctx */) {
         'QField',
         'QTooltip',
         'QUploader',
-        'QChip'
+        'QChip',
+        'QToggle'
       ],
 
       directives: ['Ripple', 'ClosePopup'],

@@ -70,7 +70,10 @@
             @input="$v.form.specialitie_id.$touch"
           />
         </div>
-        <div class="col-6">
+        <div class="col-3" v-if="isEdit">
+          <q-toggle label="Alterar Senha?" color="primary" v-model="showUpdatePassword" />
+        </div>
+        <div class="col-3" v-if="showUpdatePassword">
           Senha*:
           <q-input
             bottom-slots
@@ -105,7 +108,9 @@ export default {
   mixins: [CreateValidator],
   data () {
     return {
-      showModal: false
+      showModal: false,
+      showUpdatePassword: false,
+      isEdit: false
     }
   },
   computed: {
@@ -120,28 +125,36 @@ export default {
     openModal () {
       this.resetForm()
       this.showModal = true
+      this.showUpdatePassword = true
       this.$v.form.$reset()
     },
     openModalEdit (form) {
       this.openModal()
       this.isEdit = true
-      this.form = form
+      this.showUpdatePassword = false
+      this.form = { ...form, email: form.user.email, profile_id: form.user.profile_id }
     },
     resetForm () {
+      this.isEdit = false
+      this.showUpdatePassword = false
       this.form = { ...this.formCopy }
     },
     verifyTypeAction () {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
+    prepareEmployee (form) {
+      const employeePrepared = { ...form }
+      delete form.user
+      delete form.specialitie
+      return employeePrepared
+    },
     save () {
       this.verifiyValidations()
-      const profile = {
-        ...this.form
-      }
+      const employee = this.prepareEmployee(this.form)
       this.$createOrUpdate({
         urlDispatch: this.isEdit === true ? 'Employees/update' : 'Employees/create',
-        params: profile,
-        messages: this.isEdit === true ? `Funcionário ${profile.name} alterado com sucesso` : `Funcionário ${profile.name} cadastrado com sucesso`,
+        params: employee,
+        messages: this.isEdit === true ? `Funcionário ${employee.name} alterado com sucesso` : `Funcionário ${employee.name} cadastrado com sucesso`,
         callback: () => {
           this.showModal = false
           this.$list({

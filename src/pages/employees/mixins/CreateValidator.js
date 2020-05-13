@@ -1,4 +1,4 @@
-import { required } from 'vuelidate/lib/validators'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -14,6 +14,7 @@ export default {
   },
   methods: {
     verifiyValidations () {
+      console.log(this)
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         this.$setNotifyWarning('Existem campos inválidos')
@@ -36,7 +37,12 @@ export default {
         required
       },
       password: {
-        required
+        required: requiredIf(function () {
+          if (this.form.id) {
+            return false
+          }
+          return true
+        })
       }
     }
   }
