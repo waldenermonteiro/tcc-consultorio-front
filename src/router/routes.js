@@ -5,6 +5,12 @@ const routes = [
     children: [
       { path: '', name: 'Início', component: () => import('pages/Index.vue'), meta: { roles: 'all', name: 'Dashboard', icons: 'dashboard' } },
       {
+        path: '/consultas',
+        name: 'Consultas',
+        component: () => import('pages/medical_schedules/List.vue'),
+        meta: { roles: 'admin', name: 'Configurações / Consultas', icons: 'settings / person' }
+      },
+      {
         path: '/funcionarios',
         name: 'Funcionários',
         component: () => import('pages/employees/List.vue'),
@@ -22,6 +28,12 @@ const routes = [
         name: 'Especialidades',
         component: () => import('pages/specialities/List.vue'),
         meta: { roles: 'admin', name: 'Configurações / Especialidades  ', icons: 'settings / home' }
+      },
+      {
+        path: '/pacientes',
+        name: 'Pacientes',
+        component: () => import('pages/patients/List.vue'),
+        meta: { roles: 'admin', name: 'Configurações / Pacientes  ', icons: 'settings / person' }
       },
       {
         path: '/tiposExames',
