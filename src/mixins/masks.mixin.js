@@ -1,7 +1,7 @@
 export default {
   methods: {
     $formatCPFCNPJ (val = '', type = '') {
-      let cpfCnpj = { ...{ val } }
+      const cpfCnpj = { ...{ val } }
       cpfCnpj.val = this.$addZeroLeftMaskCpfCnpj(cpfCnpj.val.toString(), type)
       return cpfCnpj.val === null
         ? ''
@@ -51,21 +51,27 @@ export default {
     },
     $formatDateBr (date) {
       if (date === null) return ''
-      let pattern = /(\d{4})-(\d{2})-(\d{2})/g
-      let getDate = pattern.exec(date)[0]
+      const pattern = /(\d{4})-(\d{2})-(\d{2})/g
+      const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1')
+    },
+    $formatDateAndHourBr (date) {
+      if (date === null) return ''
+      const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
     },
     $formatDateBrInApi (date) {
       if (date === null) return ''
-      let pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
-      let getDate = pattern.exec(date)[0]
+      const pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
+      const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3-$2-$1')
     },
     $formatDate (val) {
       function pad (val) {
         return val < 10 ? '0' + val : val
       }
-      let d = new Date(val)
+      const d = new Date(val)
       return !val ? '' : [pad(d.getMonth() + 1), pad(d.getDate()), d.getFullYear()].join('/')
     },
     $formatDateApi (val) {
@@ -80,10 +86,10 @@ export default {
     },
     $formatAccountBank (account) {
       account = account.toString()
-      let patt = /^([0-9]{7})$/
+      const patt = /^([0-9]{7})$/
       patt.test(account)
-      let lastChar = account.substr(account.length - 1)
-      let xStr = account.substring(0, account.length - 1)
+      const lastChar = account.substr(account.length - 1)
+      const xStr = account.substring(0, account.length - 1)
       return this.addZeroLeftString(xStr + '-' + lastChar, 11)
     },
     $formatCurrencyBrazil (value) {
@@ -98,8 +104,8 @@ export default {
     },
     $convertToNumberApi (value) {
       value = value.replace(/[^0-9]/g, '')
-      let lastChar = value.substr(value.length - 2)
-      let xStr = value.substring(0, value.length - 2)
+      const lastChar = value.substr(value.length - 2)
+      const xStr = value.substring(0, value.length - 2)
       return parseFloat(xStr + '.' + lastChar)
     }
   }
