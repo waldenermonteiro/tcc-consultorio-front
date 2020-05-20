@@ -23,18 +23,15 @@
         </div>
         <div class="col-3">
           Data de Nascimento*:
-          <q-input
-            bottom-slots
-            :error="$v.form.birth_date.$error"
-            v-model="form.birth_date"
-            maxlength="30"
-            outlined
-            dense
-            debounce="300"
-            color="primary"
-            error-message="Data é obrigatória"
-            @input="$v.form.birth_date.$touch"
-          ></q-input>
+          <q-input outlined v-model="form.birth_date" dense @click="$refs.qDateProxy.show()" :error="$v.form.birth_date.$error" error-message="Data é obrigatória">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                  <q-date color="primary" v-model="form.birth_date" :options="optionsFn" @input="() => $refs.qDateProxy.hide()" mask="DD/MM/YYYY" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </div>
         <div class="col-3">
           RG*:
@@ -42,7 +39,7 @@
             bottom-slots
             :error="$v.form.rg.$error"
             v-model="form.rg"
-            maxlength="30"
+            maxlength="7"
             outlined
             dense
             debounce="300"
@@ -54,6 +51,7 @@
         <div class="col-3">
           CPF*:
           <q-input
+            v-mask="['###.###.###-##']"
             bottom-slots
             :error="$v.form.cpf.$error"
             v-model="form.cpf"
@@ -126,7 +124,7 @@
             @input="$v.form.email.$touch"
           ></q-input>
         </div>
-        <div class="col-3">
+        <div class="col-3" v-if="!isEdit">
           Senha*:
           <q-input
             bottom-slots
@@ -156,6 +154,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { date } from 'quasar'
 import CreateValidator from './mixins/CreateValidator'
 export default {
   mixins: [CreateValidator],
@@ -164,35 +163,46 @@ export default {
       showModal: false,
       showUpdatePassword: false,
       isEdit: false,
-      medicalSchedule: {}
+      medicalSchedule: {},
+      executeFunctionCallback: ''
     }
   },
   computed: {
     ...mapState('Patients', ['resultCreate', 'optionsUfs'])
   },
   methods: {
-    openModal (row) {
+    optionsFn (data) {
+      return data <= date.formatDate(new Date(), 'YYYY/MM/DD')
+    },
+    openModal () {
       // this.resetForm()
       this.showModal = true
-      this.medicalSchedule = { ...row }
-      delete this.medicalSchedule.employee
-      delete this.medicalSchedule.patient
+      this.form.birth_date = this.$formatDateBr('2020-05-01')
       this.$v.form.$reset()
     },
     openModalEdit (form) {
       this.openModal()
       this.isEdit = true
-      this.form = { ...form, email: form.user.email }
+      this.form = { ...form, email: form.user.email, birth_date: this.$formatDateBr(form.birth_date) }
+      delete this.form.password
+    },
+    setFunctionCallback (func = function () {}) {
+      this.executeFunctionCallback = func
     },
     resetForm () {
       this.isEdit = false
+      this.$store.state.Patients.resultCreate = ''
       this.form = { ...this.formCopy }
     },
     verifyTypeAction () {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     preparePatient (form) {
-      const patientPrepared = { ...form }
+      const patientPrepared = {
+        ...form,
+        cpf: this.$formatReplaceCpfCnpj(form.cpf),
+        birth_date: this.$formatDateBrInApi(form.birth_date)
+      }
       delete form.user
       return patientPrepared
     },
@@ -204,23 +214,11 @@ export default {
         params: patient,
         messages: this.isEdit === true ? `Paciente ${patient.name} alterado com sucesso` : `Paciente ${patient.name} cadastrado com sucesso`,
         callback: row => {
-          // this.showModal = false
-          // this.$list({
-          //   urlDispatch: 'Patients/list'
-          // })
-          console.log(this.resultCreate)
-          this.medicalSchedule.patient_id = this.resultCreate.id
-          console.log(this.medicalSchedule)
-          this.$createOrUpdate({
-            urlDispatch: 'MedicalSchedules/update',
-            params: this.medicalSchedule,
-            callback: () => {
-              this.showModal = false
-              this.$list({
-                urlDispatch: 'MedicalSchedules/list'
-              })
-            }
+          this.showModal = false
+          this.$list({
+            urlDispatch: 'Patients/list'
           })
+          this.executeFunctionCallback()
         }
       })
     }
