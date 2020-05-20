@@ -3,9 +3,10 @@ import UserService from '../services/UserService'
 export async function login ({ commit }, obj) {
   try {
     const { data } = await UserService.login(obj)
-    const { token } = data.data.token
-    const roles = { roles: ['admin'] }
-    const user = await decryptToken(token)
+    const token = data.token.token
+    const user = await decryptToken(data.user.token)
+    const role = JSON.parse(user).user.profile.name
+    const roles = { roles: [role] }
     window.localStorage.setItem('token_clinic', token)
     window.localStorage.setItem('data_clinic', user)
     window.localStorage.setItem('roles_clinic', JSON.stringify(roles))
@@ -36,12 +37,12 @@ export async function login ({ commit }, obj) {
 //       })
 //   })
 // }
-// export const logout = async ({ commit }) => {
-//   window.localStorage.removeItem('token_clinic')
-//   window.localStorage.removeItem('data_clinic')
-//   window.localStorage.removeItem('roles_clinic')
-//   commit('CLEAR_USER_LOGIN')
-// }
+export const logout = async ({ commit }) => {
+  window.localStorage.removeItem('token_clinic')
+  window.localStorage.removeItem('data_clinic')
+  window.localStorage.removeItem('roles_clinic')
+  location.reload()
+}
 export const decryptToken = token => {
   const tokenSplit = token.split('.')
   const data = JSON.stringify(JSON.parse(atob(tokenSplit[1])).data)
