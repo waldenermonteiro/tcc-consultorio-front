@@ -7,8 +7,8 @@ export default new (class UserService extends base {
 
   login = async $data => {
     try {
-      const response = await this.service.post(`${this.api}/login`, $data)
-      return response
+      const { data } = await this.service.post(`${this.api}/login`, $data)
+      return data
     } catch (error) {
       throw this.statusResponse(error, 'login')
     }
