@@ -40,18 +40,49 @@
         </div>
         <div class="col-6">
           Data*:
+          {{ form.date_appointment }}
           <q-input
-            bottom-slots
-            :error="$v.form.date_appointment.$error"
-            v-model="form.date_appointment"
-            maxlength="30"
             outlined
+            v-model="form.date_appointment"
             dense
-            debounce="300"
-            color="primary"
-            error-message="Data é obrigatório"
-            @input="$v.form.date_appointment.$touch"
-          ></q-input>
+            @click="$refs.qDateAppointment.show()"
+            :error="$v.form.date_appointment.$error"
+            error-message="Data é obrigatória"
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
+                  <q-date color="primary" v-model="form.date_appointment" :options="optionsFn" mask="DD/MM/YYYY HH:mm:ss" />
+                  <q-time color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </div>
+        <div class="col-6" v-if="!verifyNewPatient">
+          Paciente*:
+          <q-select
+            outlined
+            :options="optionsPatients"
+            option-value="id"
+            option-label="name"
+            v-model="form.patient_id"
+            dense
+            use-input
+            bottom-slots
+            emit-value
+            map-options
+            @filter="filterPatient"
+            :rules="[val => !!val]"
+            :error="$v.form.patient_id.$error"
+            @input="$v.form.patient_id.$touch"
+            error-message="Paciente é obrigatório"
+          >
+          </q-select>
+        </div>
+        <div class="col-6">
+          Novo Paciente?<br>
+          <q-toggle v-model="verifyNewPatient" color="primary" label="Sim" />
         </div>
       </q-card-section>
       <q-separator />
@@ -68,22 +99,42 @@
 
 <script>
 import { mapState } from 'vuex'
+import { date } from 'quasar'
 import CreateValidator from './mixins/CreateValidator'
 export default {
   mixins: [CreateValidator],
   data () {
     return {
       showModal: false,
-      isEdit: false
+      isEdit: false,
+      optionsPatients: []
     }
   },
   computed: {
-    ...mapState('Employees', ['employees'])
+    ...mapState('Employees', ['employees']),
+    ...mapState('Patients', ['patients'])
   },
   mounted () {
     this.$list({ urlDispatch: 'Employees/list' })
+    this.$list({ urlDispatch: 'Patients/list' })
+    this.optionsPatients = [...this.patients]
   },
   methods: {
+    filterPatient (val, update) {
+      update(() => {
+        if (val === '') {
+          update(() => {
+            this.optionsPatients = [...this.patients]
+          })
+        } else {
+          const needle = val.toLowerCase()
+          this.optionsPatients = this.patients.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
+        }
+      })
+    },
+    optionsFn (data) {
+      return data <= date.formatDate(new Date(), 'YYYY/MM/DD HH:mm:ss')
+    },
     openModal () {
       this.resetForm()
       this.showModal = true
@@ -102,7 +153,7 @@ export default {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     prepareMedicalSchedule (form) {
-      const medicalSchedulePrepared = { ...form }
+      const medicalSchedulePrepared = { ...form, date_appointment: date.formatDate(form.date_appointment, 'YYYY-MM-DD HH:mm:ss'), status: 'Agendada' }
       delete form.patient
       delete form.employee
       return medicalSchedulePrepared

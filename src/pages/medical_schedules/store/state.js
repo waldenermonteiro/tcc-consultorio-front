@@ -8,7 +8,8 @@ export default function () {
       { name: 'patient', align: 'center', label: 'Paciente', field: 'patient', sortable: true },
       { name: 'employee', align: 'center', label: 'Médico', field: 'employee', sortable: true },
       { name: 'specialitie', align: 'center', label: 'Especialidade', field: 'specialitie', sortable: true },
-      { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: true, headerStyle: 'width: 200px' }
+      { name: 'status', align: 'center', label: 'Status', field: 'status', sortable: true },
+      { name: 'actions', align: 'right', label: 'Ações', field: 'actions', sortable: true, headerStyle: 'width: 200px' }
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { required } from 'vuelidate/lib/validators'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -9,12 +9,12 @@ export default {
         employee_id: 0,
         status: 'Agendada'
       },
-      formCopy: { ...this.form }
+      formCopy: { ...this.form },
+      verifyNewPatient: false
     }
   },
   methods: {
     verifiyValidations () {
-      console.log(this)
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         this.$setNotifyWarning('Existem campos inválidos')
@@ -32,6 +32,14 @@ export default {
       },
       employee_id: {
         required
+      },
+      patient_id: {
+        required: requiredIf(function () {
+          if (this.verifyNewPatient) {
+            return false
+          }
+          return true
+        })
       }
     }
   }

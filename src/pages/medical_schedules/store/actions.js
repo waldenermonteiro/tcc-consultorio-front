@@ -22,6 +22,13 @@ export async function update ({ commit }, params) {
     throw error
   }
 }
+export async function updateStatus ({ commit }, params) {
+  try {
+    await MedicalSchedulesService.updateStatus(params, params.id)
+  } catch (error) {
+    throw error
+  }
+}
 export async function remove ({ commit }, params) {
   try {
     await MedicalSchedulesService.remove(params.id)
