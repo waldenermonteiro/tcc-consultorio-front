@@ -16,31 +16,42 @@
             :icon="el.icon"
           />
         </q-breadcrumbs>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn-dropdown icon="person" dense rounded>
+          <q-list style="min-width: 250px" dense>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon name="person" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  <strong>Nome:</strong>
+                  {{ user.name }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable @click.native="logout()">
+              <q-item-section avatar>
+                <q-icon name="exit_to_app" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="250" content-class="bg-grey-1">
       <q-list class="img-background">
-        <q-item clickable to="/" exact active-class="text-blue-10">
+        <q-item v-for="route in routes" :key="route.id" clickable :to="route.path" exact active-class="text-blue-10" v-show="verifyIfRoleExistInRolesRoute(route.meta.roles)">
           <q-item-section avatar>
-            <q-icon name="home" />
+            <q-icon :name="route.meta.icons" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Inicio</q-item-label>
+            <q-item-label>{{ route.name }}</q-item-label>
           </q-item-section>
         </q-item>
-        <q-expansion-item icon="settings" label="Configurações" link :header-inset-level="0" :content-inset-level="0.2">
-          <q-item v-for="route in routes" :key="route.id" clickable :to="route.path" exact active-class="text-blue-10" v-show="verifyProfile(route.path)">
-            <q-item-section avatar>
-              <q-icon :name="route.meta.icons.split(' / ')[1]" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ route.name }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-expansion-item>
       </q-list>
     </q-drawer>
     <q-page-container>
@@ -50,15 +61,21 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { recoverRoles, verifyIfRoleExistInRolesRoute } from '../router/verifyRoutes'
 export default {
   name: 'MainLayout',
   data () {
     return {
       leftDrawerOpen: false,
-      routes: this.$router.options.routes[0].children
+      routes: this.$router.options.routes[2].children
     }
   },
+  computed: {
+    ...mapState('Users', ['user'])
+  },
   methods: {
+    ...mapActions('Users', ['logout']),
     setBreadcrumbs (route, icon) {
       const r = route.split(' / ')
       const i = icon.split(' / ')
@@ -71,15 +88,9 @@ export default {
       })
       return arr
     },
-    verifyProfile (routeItem) {
-      const profile = 'admin'
-      for (const route of this.routes) {
-        if (route.path === routeItem) {
-          if (route.meta.roles === profile) return true
-          return false
-        }
-      }
-      return true
+    verifyIfRoleExistInRolesRoute (rolesRoute) {
+      const roles = recoverRoles()
+      return verifyIfRoleExistInRolesRoute(rolesRoute, roles[0])
     }
   }
 }
