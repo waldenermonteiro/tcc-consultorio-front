@@ -16,13 +16,8 @@
         table-style="material striped"
       >
         <template v-slot:top>
-          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo Funcionário" @click="createMedicalSchedule()" />
+          <q-btn dense size="sm" icon="add" color="primary" label="Nova Consulta" @click="createMedicalSchedule()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -50,8 +45,8 @@
           </q-td>
         </template>
         <template v-slot:body-cell-actions="props">
-          <q-td key="actions" :props="props">
-            <q-btn v-if="!props.row.patient" size="xs" dense color="primary" :title="'Cadastrar Paciente'" icon="person" class="q-mr-sm" @click="creatPatient(props.row)"></q-btn>
+          <q-td key="actions" :props="props" v-if="props.row.status !== 'Cancelada'">
+            <q-btn v-if="!props.row.patient" size="xs" dense color="primary" :title="'Cadastrar Paciente'" icon="person" class="q-mr-sm" @click="createPatient(props.row)"></q-btn>
             <q-btn
               size="xs"
               dense
@@ -62,7 +57,16 @@
               @click="printPrescriptionMedicament(props.row)"
             ></q-btn>
             <q-btn size="xs" dense color="secondary" :title="'Editar consulta ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateMedicalSchedule(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir consulta ' + props.row.name" icon="delete" @click="removeMedicalSchedule(props.row)"></q-btn>
+            <q-btn size="xs" dense color="negative" :title="'Excluir consulta ' + props.row.name" icon="delete" class="q-mr-sm" @click="removeMedicalSchedule(props.row)"></q-btn>
+            <q-btn
+              size="xs"
+              dense
+              color="negative"
+              :title="'Cancelar consulta ' + props.row.name"
+              icon="not_interested"
+              class="q-mr-sm"
+              @click="canceledMedicalSchedule(props.row)"
+            ></q-btn>
           </q-td>
         </template>
       </q-table>
@@ -88,11 +92,13 @@ export default {
       filter: '',
       pagination: {
         rowsPerPage: 10
-      }
+      },
+      rowSelected: {}
     }
   },
   computed: {
-    ...mapState('MedicalSchedules', ['medicalSchedules', 'columns'])
+    ...mapState('MedicalSchedules', ['medicalSchedules', 'columns']),
+    ...mapState('Patients', ['resultCreate'])
   },
   mounted () {
     this.$list({ urlDispatch: 'MedicalSchedules/list' })
@@ -101,14 +107,50 @@ export default {
     printPrescriptionMedicament (row) {
       printDocument(JSON.stringify(row))
     },
-    creatPatient (row) {
-      this.$refs.modalPatientCreate.openModal(row)
+    createPatient (row) {
+      this.rowSelected = row
+      this.$refs.modalPatientCreate.openModal()
+      this.$refs.modalPatientCreate.setFunctionCallback(this.finalizationCreateMedicalSchedule)
     },
     createMedicalSchedule () {
       this.$refs.modalMedicalSchedules.openModal()
     },
+    finalizationCreateMedicalSchedule () {
+      const medicalSchedule = { ...this.rowSelected }
+      delete medicalSchedule.employee
+      delete medicalSchedule.patient
+      medicalSchedule.patient_id = this.resultCreate.id
+      this.$createOrUpdate({
+        urlDispatch: 'MedicalSchedules/update',
+        params: medicalSchedule,
+        callback: () => {
+          this.showModal = false
+          this.$list({
+            urlDispatch: 'MedicalSchedules/list'
+          })
+        }
+      })
+    },
     updateMedicalSchedule (row) {
       this.$refs.modalMedicalSchedules.openModalEdit(JSON.parse(JSON.stringify(row)))
+    },
+    canceledMedicalSchedule (row) {
+      this.$setDialogQuestion({
+        title: 'Cancelar Consulta',
+        message: `Tem certeza que deseja cancelar a consulta ${row.name} ?`,
+        callback: () => {
+          this.$createOrUpdate({
+            urlDispatch: 'MedicalSchedules/updateStatus',
+            params: { id: row.id, status: 'Cancelada' },
+            messages: 'Consulta cancelada com sucesso',
+            callback: () => {
+              this.$list({
+                urlDispatch: 'MedicalSchedules/list'
+              })
+            }
+          })
+        }
+      })
     },
     removeMedicalSchedule (row) {
       this.$setDialogQuestion({
