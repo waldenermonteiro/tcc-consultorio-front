@@ -1,10 +1,10 @@
-import { required } from 'vuelidate/lib/validators'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
       form: {
         name: 'Waldener Junior',
-        birth_date: '2000-01-01',
+        birth_date: '',
         address: 'Travessa Curuzu',
         rg: '6134560',
         cpf: '03214569871',
@@ -58,7 +58,12 @@ export default {
         required
       },
       password: {
-        required
+        required: requiredIf(function () {
+          if (this.form.id) {
+            return false
+          }
+          return true
+        })
       }
     }
   }
