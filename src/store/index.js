@@ -7,6 +7,7 @@ import Patients from '../pages/patients/store'
 import Profiles from '../pages/profiles/store'
 import Specialities from '../pages/specialities/store'
 import TypesExams from '../pages/types_exams/store'
+import Users from '../pages/users/store'
 Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
@@ -18,7 +19,8 @@ export default function (/* { ssrContext } */) {
       Patients,
       Profiles,
       Specialities,
-      TypesExams
+      TypesExams,
+      Users
     },
 
     // enable strict mode (adds overhead!)
