@@ -29,6 +29,14 @@
                 </q-item-label>
               </q-item-section>
             </q-item>
+            <q-item clickable @click.native="updatePassword()">
+              <q-item-section avatar>
+                <q-icon name="build" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Alterar senha</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item clickable @click.native="logout()">
               <q-item-section avatar>
                 <q-icon name="exit_to_app" />
@@ -57,14 +65,19 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <update-password ref="modalUpdatePassword"></update-password>
   </q-layout>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import { recoverRoles, verifyIfRoleExistInRolesRoute } from '../router/verifyRoutes'
+import UpdatePassword from '../pages/users/components/UpdatePassword'
 export default {
   name: 'MainLayout',
+  components: {
+    UpdatePassword
+  },
   data () {
     return {
       leftDrawerOpen: false,
@@ -87,6 +100,9 @@ export default {
         })
       })
       return arr
+    },
+    updatePassword () {
+      this.$refs.modalUpdatePassword.openModal()
     },
     verifyIfRoleExistInRolesRoute (rolesRoute) {
       const roles = recoverRoles()
@@ -163,5 +179,8 @@ table tbody tr:nth-child(2n + 1):hover {
 }
 .q-field {
   font-size: 13px;
+}
+.q-field--auto-height.q-field--dense .q-field__control, .q-field--auto-height.q-field--dense .q-field__native{
+  min-height: 28px;
 }
 </style>
