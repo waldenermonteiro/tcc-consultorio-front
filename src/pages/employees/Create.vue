@@ -9,6 +9,7 @@
         <div class="col-6">
           Nome*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
@@ -24,6 +25,7 @@
         <div class="col-3">
           Email*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.email.$error"
             v-model="form.email"
@@ -39,6 +41,7 @@
         <div class="col-3">
           Perfil*:
           <q-select
+            :readonly="isView"
             outlined
             v-model="form.profile_id"
             option-value="id"
@@ -56,6 +59,7 @@
         <div class="col-3">
           Especialidade*:
           <q-select
+            :readonly="isView"
             outlined
             v-model="form.specialitie_id"
             option-value="id"
@@ -94,7 +98,7 @@
       <q-card-actions class="row">
         <div class="col-12 text-right">
           <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn v-if="!isView" dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -110,7 +114,8 @@ export default {
     return {
       showModal: false,
       showUpdatePassword: false,
-      isEdit: false
+      isEdit: false,
+      isView: false
     }
   },
   computed: {
@@ -130,17 +135,24 @@ export default {
     },
     openModalEdit (form) {
       this.openModal()
-      this.isEdit = true
-      this.showUpdatePassword = false
       this.form = { ...form, email: form.user.email, profile_id: form.user.profile_id }
+      this.showUpdatePassword = false
+      this.isEdit = true
+    },
+    openModalView (form) {
+      this.openModal()
+      this.form = { ...form, email: form.user.email, profile_id: form.user.profile_id }
+      this.showUpdatePassword = false
+      this.isView = true
     },
     resetForm () {
+      this.form = { ...this.formCopy }
+      this.isView = false
       this.isEdit = false
       this.showUpdatePassword = false
-      this.form = { ...this.formCopy }
     },
     verifyTypeAction () {
-      return this.isEdit ? 'Editar' : 'Cadastrar'
+      return this.isEdit ? 'Editar' : this.isView ? 'Visualizar' : 'Cadastrar'
     },
     prepareEmployee (form) {
       const employeePrepared = { ...form }
