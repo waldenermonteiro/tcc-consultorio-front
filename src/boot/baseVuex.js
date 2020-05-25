@@ -11,7 +11,12 @@ export default ({ Vue, store }) => {
           if (params.callback) params.callback()
         } catch (errors) {
           this.$setNotifyDanger(errors)
-        } finally { Vue.prototype.$q.loading.hide() }
+        } finally {
+          Vue.prototype.$q.loading.hide()
+        }
+      },
+      async $login (params) {
+        await this.skeleton(params)
       },
       async $list (params) {
         await this.skeleton(params)
@@ -26,6 +31,5 @@ export default ({ Vue, store }) => {
         await this.skeleton(params)
       }
     }
-
   })
 }

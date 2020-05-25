@@ -2,6 +2,7 @@ import { Notify, Dialog } from 'quasar'
 export default {
   methods: {
     $setNotifyDanger (message) {
+      console.log(message)
       const uniqueMessage = message.message || message
       if (Array.isArray(message)) {
         this.setMultipleNotifyDanger(message)
@@ -18,8 +19,8 @@ export default {
       })
     },
     setMultipleNotifyDanger (messages) {
-      messages.forEach(message => {
-        this.setUniqueNotifyDanger(message.errorMessage)
+      messages.forEach(object => {
+        this.setUniqueNotifyDanger(object.message)
       })
     },
     $setNotifySuccess (message) {

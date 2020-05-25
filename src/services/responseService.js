@@ -19,7 +19,7 @@ const verifyStatusResponse = (response, type, description) => {
   return (statusHttp[response.status] || statusHttp.default)()
 }
 const verifyErrorsData = data => {
-  return data
+  return data.errors
 }
 const verifyTypeAction = (action, description) => {
   const typesAction = {
