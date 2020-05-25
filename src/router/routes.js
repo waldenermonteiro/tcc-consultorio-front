@@ -26,7 +26,7 @@ const routes = [
         path: '/funcionarios',
         name: 'Funcionários',
         component: () => import('pages/employees/List.vue'),
-        meta: { roles: ['admin', 'patient'], name: 'Funcionários', icons: 'person' }
+        meta: { roles: ['Medico', 'patient'], name: 'Funcionários', icons: 'person' }
       },
       {
         path: '/medicamentos',
@@ -38,19 +38,19 @@ const routes = [
         path: '/perfis',
         name: 'Perfis',
         component: () => import('pages/profiles/List.vue'),
-        meta: { roles: ['admin', 'patient'], name: 'Perfis', icons: 'person' }
+        meta: { roles: ['Medico', 'patient'], name: 'Perfis', icons: 'person' }
       },
       {
         path: '/especialidades',
         name: 'Especialidades',
         component: () => import('pages/specialities/List.vue'),
-        meta: { roles: ['admin', 'patient'], name: 'Especialidades  ', icons: 'home' }
+        meta: { roles: ['Medico', 'patient'], name: 'Especialidades  ', icons: 'home' }
       },
       {
         path: '/pacientes',
         name: 'Pacientes',
         component: () => import('pages/patients/List.vue'),
-        meta: { roles: ['admin', 'patient'], name: 'Pacientes  ', icons: 'person' }
+        meta: { roles: ['Medico', 'patient'], name: 'Pacientes  ', icons: 'person' }
       },
       {
         path: '/tiposExames',
