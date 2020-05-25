@@ -28,8 +28,9 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
+            <q-btn size="xs" dense color="positive" :title="'Visualizar especialidade ' + props.row.name" icon="search" class="q-mr-sm" @click="viewSpecialitie(props.row)"></q-btn>
             <q-btn size="xs" dense color="secondary" :title="'Editar especialidade ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateSpecialitie(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir especialidade ' + props.row.name"  icon="delete" @click="removeSpecialitie(props.row)"></q-btn>
+            <q-btn size="xs" dense color="negative" :title="'Excluir especialidade ' + props.row.name" icon="delete" @click="removeSpecialitie(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
@@ -64,6 +65,9 @@ export default {
     },
     updateSpecialitie (row) {
       this.$refs.modalSpecialitie.openModalEdit(JSON.parse(JSON.stringify(row)))
+    },
+    viewSpecialitie (row) {
+      this.$refs.modalSpecialitie.openModalView(JSON.parse(JSON.stringify(row)))
     },
     removeSpecialitie (row) {
       this.$setDialogQuestion({
