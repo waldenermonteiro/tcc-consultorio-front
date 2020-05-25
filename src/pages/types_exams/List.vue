@@ -28,6 +28,15 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
+            <q-btn
+              size="xs"
+              dense
+              color="positive"
+              :title="'Visualizar informações do tipo de exame ' + props.row.name"
+              icon="search"
+              class="q-mr-sm"
+              @click="viewTypeExam(props.row)"
+            ></q-btn>
             <q-btn size="xs" dense color="secondary" :title="'Editar tipo de exame ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateTypeExam(props.row)"></q-btn>
             <q-btn size="xs" dense color="negative" :title="'Excluir tipo de exame ' + props.row.name" icon="delete" @click="removeTypeExam(props.row)"></q-btn>
           </q-td>
@@ -64,6 +73,9 @@ export default {
     },
     updateTypeExam (row) {
       this.$refs.modalTypeExam.openModalEdit(JSON.parse(JSON.stringify(row)))
+    },
+    viewTypeExam (row) {
+      this.$refs.modalTypeExam.openModalView(JSON.parse(JSON.stringify(row)))
     },
     removeTypeExam (row) {
       this.$setDialogQuestion({
