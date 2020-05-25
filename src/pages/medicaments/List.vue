@@ -1,7 +1,17 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table dense title="Treats" :data="medicaments" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
+      <q-table
+        dense
+        title="Treats"
+        :data="medicaments"
+        :columns="columns"
+        row-key="id"
+        :filter="filter"
+        separator="cell"
+        :pagination.sync="pagination"
+        table-style="material striped"
+      >
         <template v-slot:top>
           <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
@@ -18,6 +28,7 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
+            <q-btn size="xs" dense color="positive" :title="'Visualizar perfil ' + props.row.name" icon="search" class="q-mr-sm" @click="viewMedicament(props.row)"></q-btn>
             <q-btn size="xs" dense color="secondary" :title="'Editar medicamento ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateMedicament(props.row)"></q-btn>
             <q-btn size="xs" dense color="negative" :title="'Excluir medicamento ' + props.row.name" icon="delete" @click="removeMedicament(props.row)"></q-btn>
           </q-td>
@@ -54,6 +65,9 @@ export default {
     },
     updateMedicament (row) {
       this.$refs.modalMedicament.openModalEdit(JSON.parse(JSON.stringify(row)))
+    },
+    viewMedicament (row) {
+      this.$refs.modalMedicament.openModalView(JSON.parse(JSON.stringify(row)))
     },
     removeMedicament (row) {
       this.$setDialogQuestion({

@@ -9,6 +9,7 @@
         <div class="col-12">
           Nome Genérico*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
@@ -24,6 +25,7 @@
         <div class="col-12">
           Nome de Fábrica*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.factory.$error"
             v-model="form.factory"
@@ -37,8 +39,9 @@
           ></q-input>
         </div>
         <div class="col-12">
-          Fabricanete*:
+          Fabricante*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.manufacturer.$error"
             v-model="form.manufacturer"
@@ -57,7 +60,7 @@
       <q-card-actions class="row">
         <div class="col-12 text-right">
           <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn v-if="!isView" dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -70,7 +73,9 @@ export default {
   mixins: [CreateValidator],
   data () {
     return {
-      showModal: false
+      showModal: false,
+      isView: false,
+      isEdit: false
     }
   },
   methods: {
@@ -84,11 +89,18 @@ export default {
       this.isEdit = true
       this.form = form
     },
+    openModalView (form) {
+      this.openModal()
+      this.form = form
+      this.isView = true
+    },
     resetForm () {
       this.form = { ...this.formCopy }
+      this.isView = false
+      this.isEdit = false
     },
     verifyTypeAction () {
-      return this.isEdit ? 'Editar' : 'Cadastrar'
+      return this.isEdit ? 'Editar' : this.isView ? 'Visualizar' : 'Cadastrar'
     },
     save () {
       this.verifiyValidations()
