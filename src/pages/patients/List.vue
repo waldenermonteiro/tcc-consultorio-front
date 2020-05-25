@@ -24,6 +24,7 @@
 
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
+            <q-btn size="xs" dense color="positive" :title="'Visualizar paciente ' + props.row.name" icon="search" class="q-mr-sm" @click="viewPatient(props.row)"></q-btn>
             <q-btn size="xs" dense color="secondary" :title="'Editar paciente ' + props.row.name" icon="edit" class="q-mr-sm" @click="updatePatient(props.row)"></q-btn>
             <q-btn size="xs" dense color="negative" :title="'Excluir paciente ' + props.row.name" icon="delete" @click="removePatient(props.row)"></q-btn>
           </q-td>
@@ -60,6 +61,9 @@ export default {
     },
     updatePatient (row) {
       this.$refs.modalPatient.openModalEdit(JSON.parse(JSON.stringify(row)))
+    },
+    viewPatient (row) {
+      this.$refs.modalPatient.openModalView(JSON.parse(JSON.stringify(row)))
     },
     removePatient (row) {
       this.$setDialogQuestion({

@@ -9,6 +9,7 @@
         <div class="col-6">
           Nome*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
@@ -23,9 +24,17 @@
         </div>
         <div class="col-3">
           Data de Nascimento*:
-          <q-input outlined v-model="form.birth_date" dense @click="$refs.qDateProxy.show()" :error="$v.form.birth_date.$error" error-message="Data é obrigatória">
+          <q-input
+            :readonly="isView"
+            outlined
+            v-model="form.birth_date"
+            dense
+            @click="$refs.qDateProxy.show()"
+            :error="$v.form.birth_date.$error"
+            error-message="Data é obrigatória"
+          >
             <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
+              <q-icon name="event" class="cursor-pointer" v-if="!isView">
                 <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                   <q-date color="primary" v-model="form.birth_date" :options="optionsFn" @input="() => $refs.qDateProxy.hide()" mask="DD/MM/YYYY" />
                 </q-popup-proxy>
@@ -36,6 +45,7 @@
         <div class="col-3">
           RG*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.rg.$error"
             v-model="form.rg"
@@ -51,6 +61,7 @@
         <div class="col-3">
           CPF*:
           <q-input
+            :readonly="isView"
             v-mask="['###.###.###-##']"
             bottom-slots
             :error="$v.form.cpf.$error"
@@ -67,6 +78,7 @@
         <div class="col-3">
           Cidade*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.city.$error"
             v-model="form.city"
@@ -82,6 +94,7 @@
         <div class="col-3">
           Estado*:
           <q-select
+            :readonly="isView"
             outlined
             v-model="form.state"
             :options="optionsUfs"
@@ -97,6 +110,7 @@
         <div class="col-3">
           Sexo*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.sex.$error"
             v-model="form.sex"
@@ -112,6 +126,7 @@
         <div class="col-3">
           Email*:
           <q-input
+            :readonly="isView"
             bottom-slots
             :error="$v.form.email.$error"
             v-model="form.email"
@@ -124,7 +139,7 @@
             @input="$v.form.email.$touch"
           ></q-input>
         </div>
-        <div class="col-3" v-if="!isEdit">
+        <div class="col-3" v-if="!isEdit && !isView">
           Senha*:
           <q-input
             bottom-slots
@@ -145,7 +160,7 @@
       <q-card-actions class="row">
         <div class="col-12 text-right">
           <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn v-if="!isView" dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -163,6 +178,7 @@ export default {
       showModal: false,
       showUpdatePassword: false,
       isEdit: false,
+      isView: false,
       medicalSchedule: {},
       executeFunctionCallback: ''
     }
@@ -175,7 +191,7 @@ export default {
       return data <= date.formatDate(new Date(), 'YYYY/MM/DD')
     },
     openModal () {
-      // this.resetForm()
+      this.resetForm()
       this.showModal = true
       this.form.birth_date = this.$formatDateBr('2020-05-01')
       this.$v.form.$reset()
@@ -186,16 +202,22 @@ export default {
       this.form = { ...form, email: form.user.email, birth_date: this.$formatDateBr(form.birth_date) }
       delete this.form.password
     },
-    setFunctionCallback (func = function () {}) {
-      this.executeFunctionCallback = func
+    openModalView (form) {
+      this.openModal()
+      this.form = { ...form, email: form.user.email, birth_date: this.$formatDateBr(form.birth_date) }
+      this.isView = true
     },
     resetForm () {
-      this.isEdit = false
       this.$store.state.Patients.resultCreate = ''
       this.form = { ...this.formCopy }
+      this.isEdit = false
+      this.isView = false
     },
     verifyTypeAction () {
-      return this.isEdit ? 'Editar' : 'Cadastrar'
+      return this.isEdit ? 'Editar' : this.isView ? 'Visualizar' : 'Cadastrar'
+    },
+    setFunctionCallback (func = function () {}) {
+      this.executeFunctionCallback = func
     },
     preparePatient (form) {
       const patientPrepared = {
