@@ -9,6 +9,17 @@ export async function list ({ commit }) {
     throw error
   }
 }
+export async function searchCep ({ commit }, param) {
+  try {
+    const { data } = await PatientsService.searchCep(param)
+    if (data.erro) {
+      throw new Error('Cep inválido')
+    }
+    commit('SET_CEP_INFORMATIONS', data)
+  } catch (error) {
+    throw error
+  }
+}
 export async function create ({ commit }, params) {
   try {
     const { data } = await PatientsService.create(params)
