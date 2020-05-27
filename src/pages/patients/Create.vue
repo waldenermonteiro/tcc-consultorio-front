@@ -75,6 +75,73 @@
             @input="$v.form.rg.$touch"
           ></q-input>
         </div>
+
+        <div class="col-3">
+          CEP*:
+          <q-input
+            :readonly="isView"
+            v-mask="['#####-###']"
+            bottom-slots
+            :error="$v.form.cep.$error"
+            v-model="form.cep"
+            maxlength="9"
+            outlined
+            dense
+            debounce="300"
+            color="primary"
+            error-message="Cep é obrigatório"
+            @keyup.enter="searchCep(form.cep)"
+            @input="$v.form.cep.$touch"
+          ></q-input>
+        </div>
+        <div class="col-6">
+          Endereço*:
+          <q-input
+            :readonly="isView"
+            bottom-slots
+            :error="$v.form.address.$error"
+            v-model="form.address"
+            maxlength="30"
+            outlined
+            dense
+            debounce="300"
+            color="primary"
+            error-message="Endereço é obrigatório"
+            @input="$v.form.address.$touch"
+          ></q-input>
+        </div>
+        <div class="col-4">
+          Complemento*:
+          <q-input
+            :readonly="isView"
+            bottom-slots
+            :error="$v.form.complement.$error"
+            v-model="form.complement"
+            maxlength="30"
+            outlined
+            dense
+            debounce="300"
+            color="primary"
+            error-message="Complemento é obrigatório"
+            @input="$v.form.complement.$touch"
+          ></q-input>
+        </div>
+        <div class="col-3">
+          Bairro*:
+          <q-input
+            :readonly="isView"
+            bottom-slots
+            :error="$v.form.district.$error"
+            v-model="form.district"
+            maxlength="30"
+            outlined
+            dense
+            debounce="300"
+            color="primary"
+            error-message="Bairro é obrigatório"
+            @input="$v.form.district.$touch"
+          ></q-input>
+        </div>
         <div class="col-3">
           Cidade*:
           <q-input
@@ -91,7 +158,7 @@
             @input="$v.form.city.$touch"
           ></q-input>
         </div>
-        <div class="col-3">
+        <div class="col-2">
           Estado*:
           <q-select
             :readonly="isView"
@@ -107,7 +174,7 @@
             @input="$v.form.state.$touch"
           />
         </div>
-        <div class="col-3">
+        <div class="col-2">
           Sexo*:
           <q-input
             :readonly="isView"
@@ -123,7 +190,7 @@
             @input="$v.form.sex.$touch"
           ></q-input>
         </div>
-        <div class="col-3">
+        <div class="col-4">
           Email*:
           <q-input
             :readonly="isView"
@@ -184,7 +251,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('Patients', ['resultCreate', 'optionsUfs'])
+    ...mapState('Patients', ['resultCreate', 'optionsUfs', 'cepInformations'])
   },
   methods: {
     optionsFn (data) {
@@ -206,6 +273,22 @@ export default {
       this.openModal()
       this.form = { ...form, email: form.user.email, birth_date: this.$formatDateBr(form.birth_date) }
       this.isView = true
+    },
+    searchCep (cep) {
+      const cepFormated = this.$formatReplaceCep(cep)
+      this.$list({
+        urlDispatch: 'Patients/searchCep',
+        params: cepFormated,
+        callback: () => {
+          this.form = {
+            ...this.form,
+            address: this.cepInformations.logradouro,
+            district: this.cepInformations.bairro,
+            city: this.cepInformations.localidade,
+            state: this.cepInformations.uf
+          }
+        }
+      })
     },
     resetForm () {
       this.$store.state.Patients.resultCreate = ''

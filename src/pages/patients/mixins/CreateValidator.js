@@ -5,17 +5,20 @@ export default {
       form: {
         name: 'Waldener Junior',
         birth_date: '',
-        address: 'Travessa Curuzu',
         rg: '6134560',
         cpf: '03214569871',
-        city: 'Belem',
-        state: 'Para',
+        cep: '',
+        address: '',
+        complement: '',
+        district: '',
+        city: '',
+        state: '',
         sex: 'Masculino',
         email: 'waldener@gmail.com',
         password: '123',
         profile_id: 2
       },
-      formCopy: { ...this.form }
+      formCopy: this.form
     }
   },
   methods: {
@@ -36,13 +39,22 @@ export default {
       birth_date: {
         required
       },
-      address: {
-        required
-      },
       rg: {
         required
       },
       cpf: {
+        required
+      },
+      cep: {
+        required
+      },
+      address: {
+        required
+      },
+      complement: {
+        required
+      },
+      district: {
         required
       },
       city: {
