@@ -153,7 +153,7 @@ export default {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     prepareMedicalSchedule (form) {
-      const medicalSchedulePrepared = { ...form, date_appointment: date.formatDate(form.date_appointment, 'YYYY-MM-DD HH:mm:ss'), status: 'Agendada' }
+      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourApi(form.date_appointment), status: 'Agendada' }
       delete form.patient
       delete form.employee
       return medicalSchedulePrepared
