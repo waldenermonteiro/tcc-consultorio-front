@@ -50,19 +50,25 @@ export default {
       return s
     },
     $formatDateBr (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{4})-(\d{2})-(\d{2})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1')
     },
     $formatDateAndHourBr (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
     },
+    $formatDateAndHourApi (date) {
+      if (date === null || date === '') return ''
+      const pattern = /(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$3-$2-$1 $4:$5:$6')
+    },
     $formatDateBrInApi (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3-$2-$1')
