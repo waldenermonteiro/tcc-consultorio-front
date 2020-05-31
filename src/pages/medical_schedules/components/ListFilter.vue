@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <div class="row justify-center q-col-gutter-sm ">
-      <div class="col-3">
+      <div class="col-3" v-if="!hideDescription">
         Descrição da Consulta:
         <q-input @keyup.enter="send()" outlined dense v-model.trim="formFilter.name"> </q-input>
       </div>
@@ -9,7 +9,7 @@
         Médico:
         <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options />
       </div>
-      <div class="col-3">
+      <div class="col-3" v-if="!hidePatient">
         Paciente*:
         <q-select
           outlined
@@ -53,6 +53,16 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  props: {
+    hidePatient: {
+      required: false,
+      default: false
+    },
+    hideDescription: {
+      required: false,
+      default: false
+    }
+  },
   data () {
     return {
       formFilter: {
@@ -67,13 +77,16 @@ export default {
   },
   mounted () {
     this.$list({ urlDispatch: 'Employees/list' })
-    this.$list({ urlDispatch: 'Patients/list' })
+    if (!this.hidePatient) this.$list({ urlDispatch: 'Patients/list' })
   },
   computed: {
     ...mapState('Employees', ['employees']),
     ...mapState('Patients', ['patients'])
   },
   methods: {
+    setForm (form) {
+      this.formFilter = { ...form }
+    },
     filterPatient (val, update, abort) {
       update(() => {
         if (val.length < 2) {
