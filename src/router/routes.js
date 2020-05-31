@@ -23,6 +23,12 @@ const routes = [
         meta: { roles: ['Medico', 'patient'], name: 'Consultas', icons: 'person' }
       },
       {
+        path: '/consultas-medico',
+        name: 'Consultas de Hoje',
+        component: () => import('pages/medical_schedules/ListOfMedic.vue'),
+        meta: { roles: ['Medico', 'patient'], name: 'Consultas', icons: 'person' }
+      },
+      {
         path: '/funcionarios',
         name: 'Funcionários',
         component: () => import('pages/employees/List.vue'),
