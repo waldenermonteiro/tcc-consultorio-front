@@ -36,3 +36,10 @@ export async function remove ({ commit }, params) {
     throw error
   }
 }
+export async function finishConsult ({ commit }, params) {
+  try {
+    await MedicalSchedulesService.finishConsult(params, params.id)
+  } catch (error) {
+    throw error
+  }
+}
