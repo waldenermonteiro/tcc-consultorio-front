@@ -52,8 +52,8 @@ export default {
       Dialog.create({
         title: `${obj.title}`,
         message: `${obj.message}`,
-        cancel: { label: 'Cancelar', color: 'negative', icon: 'cancel' },
-        ok: { label: 'Sim', class: 'text-white bg-blue-gold', iconRight: 'save' }
+        cancel: { label: 'Cancelar', color: 'negative', icon: 'cancel', size: 'sm' },
+        ok: { label: 'Sim', class: 'text-white bg-blue-gold', iconRight: 'save', size: 'sm' }
       }).onOk(() => {
         obj.callback()
       })
