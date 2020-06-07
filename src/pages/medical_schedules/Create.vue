@@ -81,7 +81,7 @@
           </q-select>
         </div>
         <div class="col-6">
-          Novo Paciente?<br>
+          Novo Paciente?<br />
           <q-toggle v-model="verifyNewPatient" color="primary" label="Sim" />
         </div>
       </q-card-section>
@@ -133,7 +133,7 @@ export default {
       })
     },
     optionsFn (data) {
-      return data <= date.formatDate(new Date(), 'YYYY/MM/DD HH:mm:ss')
+      return data >= date.formatDate(new Date(), 'YYYY/MM/DD') && new Date(data).getDay() !== 0
     },
     openModal () {
       this.resetForm()
@@ -143,7 +143,7 @@ export default {
     openModalEdit (form) {
       this.openModal()
       this.isEdit = true
-      this.form = { ...form }
+      this.form = { ...form, date_appointment: this.$formatDateAndHourBr(form.date_appointment) }
     },
     resetForm () {
       this.isEdit = false

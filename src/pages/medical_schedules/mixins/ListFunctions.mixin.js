@@ -13,7 +13,7 @@ export default {
     verifyDateConsultAndDateNow (dateAppointment) {
       const dateNow = this.$formatDateApi(Date.now())
       const dateRow = this.$formatDateApi(dateAppointment)
-      return dateNow === dateRow
+      return dateRow >= dateNow
     },
     verifyIfStatusIsCanceled (status) {
       return status !== 'Cancelada'
