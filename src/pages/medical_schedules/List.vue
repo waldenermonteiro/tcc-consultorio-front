@@ -5,7 +5,6 @@
         <medical-schedules-filter class="col-12"></medical-schedules-filter>
       </div>
       <q-table
-        dense
         title="Treats"
         :data="medicalSchedules"
         :columns="columns"
@@ -45,21 +44,31 @@
           </q-td>
         </template>
         <template v-slot:body-cell-actions="props">
-          <q-td key="actions" :props="props" v-if="props.row.status !== 'Cancelada'">
-            <q-btn v-if="!props.row.patient" size="xs" dense color="primary" :title="'Cadastrar Paciente'" icon="person" class="q-mr-sm" @click="createPatient(props.row)"></q-btn>
+          <q-td key="actions" :props="props">
             <q-btn
-              size="xs"
+              v-if="!props.row.patient && verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
+              size="sm"
               dense
-              color="grey"
-              :title="'Imprimir Receita Médica' + props.row.name"
-              icon="print"
+              color="primary"
+              :title="'Cadastrar Paciente'"
+              icon="person"
               class="q-mr-sm"
-              @click="printPrescriptionMedicament(props.row)"
+              @click="createPatient(props.row)"
             ></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar consulta ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateMedicalSchedule(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir consulta ' + props.row.name" icon="delete" class="q-mr-sm" @click="removeMedicalSchedule(props.row)"></q-btn>
             <q-btn
-              size="xs"
+              v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
+              size="sm"
+              dense
+              color="secondary"
+              :title="'Editar consulta ' + props.row.name"
+              icon="edit"
+              class="q-mr-sm"
+              @click="updateMedicalSchedule(props.row)"
+            ></q-btn>
+            <!-- <q-btn size="sm" dense color="negative" :title="'Excluir consulta ' + props.row.name" icon="delete" class="q-mr-sm" @click="removeMedicalSchedule(props.row)"></q-btn> -->
+            <q-btn
+              v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
+              size="sm"
               dense
               color="negative"
               :title="'Cancelar consulta ' + props.row.name"
@@ -80,8 +89,9 @@ import { mapState } from 'vuex'
 import Create from './Create.vue'
 import PatientCreate from '../patients/Create'
 import MedicalSchedulesFilter from './components/ListFilter'
-import printDocument from './Print'
+import ListFunctions from './mixins/ListFunctions.mixin'
 export default {
+  mixins: [ListFunctions],
   components: {
     'medical-schedules-create': Create,
     'medical-schedules-filter': MedicalSchedulesFilter,
@@ -104,9 +114,6 @@ export default {
     this.$list({ urlDispatch: 'MedicalSchedules/list' })
   },
   methods: {
-    printPrescriptionMedicament (row) {
-      printDocument(JSON.stringify(row))
-    },
     createPatient (row) {
       this.rowSelected = row
       this.$refs.modalPatientCreate.openModal()

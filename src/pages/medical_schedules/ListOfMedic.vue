@@ -2,7 +2,7 @@
   <q-page>
     <div class="q-pa-md">
       <div class="row justify-center">
-        <medical-schedules-filter ref="medicalScheduleFilter" :hidePatient="true" :hideDescription="true" :setForm="formFilter" class="col-12"></medical-schedules-filter>
+        <medical-schedules-filter ref="medicalScheduleFilter" :hidePatient="true" :setForm="formFilter" class="col-12"></medical-schedules-filter>
       </div>
       <q-table
         title="Treats"
@@ -33,8 +33,9 @@
           </q-td>
         </template>
         <template v-slot:body-cell-actions="props">
-          <q-td key="actions" :props="props" v-if="props.row.status !== 'Cancelada'">
+          <q-td key="actions" :props="props" v-if="verifyIfStatusIsCanceled(props.row.status)">
             <q-btn
+              v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
               size="sm"
               dense
               color="secondary"
@@ -50,16 +51,17 @@
               :title="'Imprimir Receita Médica ' + props.row.name"
               icon="print"
               class="q-mr-sm"
-              @click="printPrescriptionMedicament(props.row)"
+              @click="printPrescriptionMedicament(props.row, props.row.date_appointment)"
             ></q-btn>
             <q-btn
+              v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
               size="sm"
               dense
               color="negative"
               :title="'Cancelar consulta ' + props.row.name"
               icon="not_interested"
               class="q-mr-sm"
-              @click="canceledMedicalSchedule(props.row)"
+              @click="canceledMedicalSchedule(props.row, props.row.date_appointment)"
             ></q-btn>
           </q-td>
         </template>
@@ -73,7 +75,9 @@ import { mapState } from 'vuex'
 import AppointmentPatient from './components/AppointmentPatient'
 import MedicalSchedulesFilter from './components/ListFilter'
 import printDocument from './Print'
+import ListFunctions from './mixins/ListFunctions.mixin'
 export default {
+  mixins: [ListFunctions],
   components: {
     'appointment-patient': AppointmentPatient,
     'medical-schedules-filter': MedicalSchedulesFilter
