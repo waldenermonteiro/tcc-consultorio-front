@@ -1,6 +1,11 @@
 export default function () {
   return {
     medicalSchedules: [],
+    optionsStatus: [
+      { label: 'Agendada', value: 'Agendada' },
+      { label: 'Finalizada', value: 'Finalizada' },
+      { label: 'Cancelada', value: 'Cancelada' }
+    ],
     columns: [
       { name: 'id', align: 'center', label: 'Id', field: 'id', sortable: true },
       { name: 'name', align: 'center', label: 'Descrição', field: 'name', sortable: true },
