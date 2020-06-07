@@ -1,13 +1,13 @@
 <template>
   <div class="q-pa-sm">
     <div class="row justify-center q-col-gutter-sm ">
-      <div class="col-3" v-if="!hideDescription">
-        Descrição da Consulta:
-        <q-input @keyup.enter="send()" outlined dense v-model.trim="formFilter.name"> </q-input>
-      </div>
       <div class="col-3">
         Médico:
-        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options />
+        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
+          <template v-if="formFilter.employee_id" v-slot:append>
+            <q-icon name="cancel" @click.stop="clearInput('employee_id')" class="cursor-pointer" />
+          </template>
+        </q-select>
       </div>
       <div class="col-3" v-if="!hidePatient">
         Paciente*:
@@ -23,12 +23,16 @@
           map-options
           @filter="filterPatient"
         >
+          <template v-if="formFilter.patient_id" v-slot:append>
+            <q-icon name="cancel" @click.stop="clearInput('patient_id')" class="cursor-pointer" />
+          </template>
         </q-select>
       </div>
       <div class="col-3">
         Data*:
         <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
           <template v-slot:append>
+            <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
                 <q-date color="primary" v-model="formFilter.date_appointment" mask="DD/MM/YYYY" />
@@ -36,6 +40,14 @@
             </q-icon>
           </template>
         </q-input>
+      </div>
+      <div class="col-3" v-if="!hideStatus">
+        Status:
+        <q-select option-value="value" option-label="label" emit-value map-options outlined :options="optionsStatus" v-model="formFilter.status" dense>
+          <template v-if="formFilter.status" v-slot:append>
+            <q-icon name="cancel" @click.stop="clearInput('status')" class="cursor-pointer" />
+          </template>
+        </q-select>
       </div>
       <div class="col-7">
         <div class="row justify-center q-col-gutter-sm">
@@ -58,7 +70,7 @@ export default {
       required: false,
       default: false
     },
-    hideDescription: {
+    hideStatus: {
       required: false,
       default: false
     }
@@ -66,10 +78,10 @@ export default {
   data () {
     return {
       formFilter: {
-        name: '',
         employee_id: '',
         patient_id: '',
-        date_appointment: ''
+        date_appointment: '',
+        status: ''
       },
       formFilterCopy: { ...this.formFilter },
       optionsPatients: this.patients
@@ -80,6 +92,7 @@ export default {
     if (!this.hidePatient) this.$list({ urlDispatch: 'Patients/list' })
   },
   computed: {
+    ...mapState('MedicalSchedules', ['optionsStatus']),
     ...mapState('Employees', ['employees']),
     ...mapState('Patients', ['patients'])
   },
@@ -115,6 +128,10 @@ export default {
           this.optionsPatients = this.patients
         }
       })
+    },
+    clearInput (prop) {
+      this.formFilter[prop] = ''
+      this.send()
     }
   }
 }
