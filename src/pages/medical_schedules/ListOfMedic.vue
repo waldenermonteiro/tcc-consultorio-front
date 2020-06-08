@@ -45,10 +45,11 @@
               @click="startConsult(props.row)"
             ></q-btn>
             <q-btn
+              v-if="verifyPrescriptionMedicamentIsEmpty(props.row.prescription_medicaments)"
               size="sm"
               dense
               color="grey"
-              :title="'Imprimir Receita Médica ' + props.row.name"
+              :title="'Imprimir Receita Médica ' + props.row.prescription_medicaments"
               icon="print"
               class="q-mr-sm"
               @click="printPrescriptionMedicament(props.row, props.row.date_appointment)"
@@ -89,10 +90,10 @@ export default {
         rowsPerPage: 10
       },
       formFilter: {
-        name: '',
         employee_id: JSON.parse(localStorage.getItem('data_clinic')).id,
         patient_id: '',
-        date_appointment: this.$formatDateBr(this.$formatDateApi(new Date()))
+        date_appointment: this.$formatDateBr(this.$formatDateApi(new Date())),
+        status: 'Agendada'
       },
       rowSelected: {}
     }
