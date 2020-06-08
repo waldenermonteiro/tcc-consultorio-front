@@ -40,7 +40,6 @@
         </div>
         <div class="col-6">
           Data*:
-          {{ form.date_appointment }}
           <q-input
             outlined
             v-model="form.date_appointment"
@@ -53,7 +52,7 @@
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
                   <q-date color="primary" v-model="form.date_appointment" :options="optionsFn" mask="DD/MM/YYYY HH:mm:ss" />
-                  <q-time color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
+                  <q-time :hour-options="hourOptions" :minute-options="minuteOptions" color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -69,7 +68,6 @@
             v-model="form.patient_id"
             dense
             use-input
-            bottom-slots
             emit-value
             map-options
             @filter="filterPatient"
@@ -107,7 +105,10 @@ export default {
     return {
       showModal: false,
       isEdit: false,
-      optionsPatients: []
+      optionsPatients: [],
+      hourOptions: [8, 9, 10, 11, 14, 15, 16, 17, 18],
+      minuteOptions: [0, 15, 30, 45],
+      defaultDate: new Date().setHours(8, 0, 0)
     }
   },
   computed: {
@@ -120,12 +121,11 @@ export default {
     this.optionsPatients = [...this.patients]
   },
   methods: {
-    filterPatient (val, update) {
+    filterPatient (val, update, abort) {
       update(() => {
-        if (val === '') {
-          update(() => {
-            this.optionsPatients = [...this.patients]
-          })
+        if (val.length < 2) {
+          abort()
+          return ''
         } else {
           const needle = val.toLowerCase()
           this.optionsPatients = this.patients.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
@@ -147,13 +147,13 @@ export default {
     },
     resetForm () {
       this.isEdit = false
-      this.form = { ...this.formCopy }
+      this.form = { ...this.formCopy, date_appointment: this.$formatDateAndHourBr(this.$formatDateAndHourApi(this.defaultDate)) }
     },
     verifyTypeAction () {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     prepareMedicalSchedule (form) {
-      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourApi(form.date_appointment), status: 'Agendada' }
+      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourBrInApi(form.date_appointment), status: 'Agendada' }
       delete form.patient
       delete form.employee
       return medicalSchedulePrepared
