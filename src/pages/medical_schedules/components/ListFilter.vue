@@ -10,7 +10,7 @@
         </q-select>
       </div>
       <div class="col-3" v-if="!hidePatient">
-        Paciente*:
+        Paciente:
         <q-select
           outlined
           :options="optionsPatients"
@@ -29,7 +29,7 @@
         </q-select>
       </div>
       <div class="col-3">
-        Data*:
+        Data:
         <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
           <template v-slot:append>
             <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
