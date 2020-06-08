@@ -17,6 +17,12 @@ export default {
     },
     verifyIfStatusIsCanceled (status) {
       return status !== 'Cancelada'
+    },
+    verifyPrescriptionMedicamentIsEmpty (receit) {
+      if (Array.isArray(receit)) {
+        return receit.length !== 0
+      }
+      return receit !== null
     }
   }
 }
