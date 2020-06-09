@@ -42,6 +42,7 @@
           Data*:
           <q-input
             outlined
+            readonly
             v-model="form.date_appointment"
             dense
             @click="$refs.qDateAppointment.show()"
