@@ -16,7 +16,7 @@
       >
         <template v-slot:top>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Nova Consulta" @click="createMedicalSchedule()" />
+          <q-btn size="sm" icon="add" color="primary" label="Nova Consulta" @click="createMedicalSchedule()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">

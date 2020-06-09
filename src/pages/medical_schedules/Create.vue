@@ -87,8 +87,8 @@
 
       <q-card-actions class="row">
         <div class="col-12 text-right">
-          <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
+          <q-btn size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>

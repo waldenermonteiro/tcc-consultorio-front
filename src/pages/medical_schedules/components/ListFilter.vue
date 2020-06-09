@@ -52,10 +52,10 @@
       <div class="col-7">
         <div class="row justify-center q-col-gutter-sm">
           <div class="col-3">
-            <q-btn dense size="sm" class="full-width" label="Limpar" color="grey" icon="delete" @click="clearForm()"></q-btn>
+            <q-btn size="sm" class="full-width" label="Limpar" color="grey" icon="delete" @click="clearForm()"></q-btn>
           </div>
           <div class="col-3">
-            <q-btn dense size="sm" class="full-width" label="Buscar" color="primary" icon="search" @click="send()"></q-btn>
+            <q-btn size="sm" class="full-width" label="Buscar" color="primary" icon="search" @click="send()"></q-btn>
           </div>
         </div>
       </div>

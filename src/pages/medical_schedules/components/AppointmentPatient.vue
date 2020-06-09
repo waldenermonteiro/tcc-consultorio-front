@@ -94,10 +94,10 @@
       <q-card-actions class="row">
         <div class="col-8 text-subtitle2">
           <q-icon size="md" name="access_time"></q-icon>Tempo da consulta: {{ `${hour}${minute}${second}` }}
-          <q-btn dense size="sm" label="Parar" icon="stop" @click="stopConsult()" color="negative"></q-btn>
+          <q-btn size="sm" label="Parar" icon="stop" @click="stopConsult()" color="negative"></q-btn>
         </div>
         <div class="col-4 text-right">
-          <q-btn size="sm" icon-right="check" label="Finalizar Consulta" @click="save()" color="primary"></q-btn>
+          <q-btn size="sm" icon="check" label="Finalizar Consulta" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
