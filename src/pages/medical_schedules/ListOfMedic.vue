@@ -35,11 +35,11 @@
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props" v-if="verifyIfStatusIsCanceled(props.row.status)">
             <q-btn
-              v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
+              v-if="props.row.patient && verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
               size="sm"
               dense
               color="secondary"
-              :title="'Iniciar consulta do paciente' + props.row.patient.name"
+              :title="'Iniciar consulta do paciente ' + (!props.row.patient ? '' :  props.row.patient.name)"
               icon="play_arrow"
               class="q-mr-sm"
               @click="startConsult(props.row)"
