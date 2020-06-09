@@ -147,6 +147,7 @@ export default {
       this.form = { ...form, date_appointment: this.$formatDateAndHourBr(form.date_appointment) }
     },
     resetForm () {
+      this.optionsPatients = []
       this.isEdit = false
       this.form = { ...this.formCopy, date_appointment: this.$formatDateAndHourBr(this.$formatDateAndHourApi(this.defaultDate)) }
     },
