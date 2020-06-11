@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="showModal" persistent>
-    <q-card style="width: 700px; max-width: 80vw;">
+    <q-card style="width: 900px; max-width: 80vw;">
       <q-toolbar class="bg-toolbar-custom">
         <q-toolbar-title class="text-h6 text-center q-ml-xl">{{ verifyTypeAction() + " Paciente" }}</q-toolbar-title>
         <q-btn flat round icon="close" size="sm" @click="showModal = false"></q-btn>
@@ -226,8 +226,8 @@
 
       <q-card-actions class="row">
         <div class="col-12 text-right">
-          <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn v-if="!isView" dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
+          <q-btn v-if="!isView" size="sm" icon="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
