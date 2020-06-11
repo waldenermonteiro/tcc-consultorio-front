@@ -76,6 +76,7 @@
             :error="$v.form.patient_id.$error"
             @input="$v.form.patient_id.$touch"
             error-message="Paciente é obrigatório"
+            hint="Digite para pesquisar um paciente"
           >
           </q-select>
         </div>

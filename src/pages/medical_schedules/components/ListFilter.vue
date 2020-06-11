@@ -22,6 +22,7 @@
           emit-value
           map-options
           @filter="filterPatient"
+          hint="Digite para pesquisar um paciente"
         >
           <template v-if="formFilter.patient_id" v-slot:append>
             <q-icon name="cancel" @click.stop="clearInput('patient_id')" class="cursor-pointer" />
