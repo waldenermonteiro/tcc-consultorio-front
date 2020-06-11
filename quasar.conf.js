@@ -97,7 +97,12 @@ module.exports = function (/* ctx */) {
         'QUploader',
         'QChip',
         'QToggle',
-        'QEditor'
+        'QEditor',
+        'QTabs',
+        'QTab',
+        'QTabPanel',
+        'QTabPanels',
+        'QRouteTab'
       ],
 
       directives: ['Ripple', 'ClosePopup'],
