@@ -12,7 +12,7 @@
           <q-input v-model="form.medicalSchedule.observation" outlined type="textarea" autogrow />
         </div>
         <div class="col-6">
-          <q-toggle v-model="isReceit" label="Emitir Receita? " />
+          <q-toggle v-model="isReceit" @input="$v.form.medicalSchedule.prescription_medicaments.medicaments.$reset()" label="Emitir Receita? " />
           <div v-if="isReceit">Observações da Receita:<q-input v-model="form.medicalSchedule.prescription_medicaments.observation" outlined type="textarea" autogrow /></div>
           <div v-if="isReceit" class="col-12 row">
             <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
@@ -23,7 +23,7 @@
                   <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addMedicament()"></q-btn>
                 </div>
               </div>
-              <q-item class="no-padding" v-for="(medicament, index) in form.medicalSchedule.prescription_medicaments.medicaments" :key="index">
+              <q-item class="no-padding" v-for="(v, index) in $v.form.medicalSchedule.prescription_medicaments.medicaments.$each.$iter" :key="index">
                 <q-item-section top class="col-6 gt-sm">
                   <q-item-label class="q-mt-sm">
                     <q-select
@@ -31,18 +31,22 @@
                       :options="optionsMedicaments"
                       option-value="name"
                       option-label="name"
-                      v-model="medicament.name"
+                      v-model.trim="v.name.$model"
                       dense
                       use-input
                       emit-value
                       map-options
                       @filter="filterMedicament"
+                      :error="v.name.$error"
+                      error-message="Nome do medicamento é obrigatório"
                     >
                     </q-select>
                   </q-item-label>
                 </q-item-section>
                 <q-item-section top>
-                  <q-item-label class="q-mt-sm"> <q-input v-model="medicament.dosage" dense outlined type="text" autogrow/></q-item-label>
+                  <q-item-label class="q-mt-sm">
+                    <q-input :error="v.dosage.$error" error-message="Dosagem é obrigatória" v-model="v.dosage.$model" dense outlined type="text" autogrow
+                  /></q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeMedicament(medicament, index)" /></div>
@@ -52,7 +56,7 @@
           </div>
         </div>
         <div class="col-6">
-          <q-toggle v-model="isExam" label="Solicitar Exame? " />
+          <q-toggle v-model="isExam" @input="$v.formRequestExam.requestExam.$reset()" label="Solicitar Exame? " />
           <div v-if="isExam" class="col-12 row">
             <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
               <div class="row q-pb-sm q-col-gutter-md">
@@ -62,7 +66,7 @@
                   <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addExam()"></q-btn>
                 </div>
               </div>
-              <q-item class="no-padding" v-for="(exam, index) in formRequestExam.requestExam" :key="index">
+              <q-item class="no-padding" v-for="(v, index) in $v.formRequestExam.requestExam.$each.$iter" :key="index">
                 <q-item-section top class="col-6 gt-sm">
                   <q-item-label class="q-mt-sm">
                     <q-select
@@ -70,18 +74,22 @@
                       :options="optionsTypesExams"
                       option-value="id"
                       option-label="name"
-                      v-model="exam.type_exam_id"
+                      v-model.trim="v.type_exam_id.$model"
                       dense
                       use-input
                       emit-value
                       map-options
                       @filter="filterTypeExam"
+                      :error="v.type_exam_id.$error"
+                      error-message="Tipo de exame é obrigatório"
                     >
                     </q-select
                   ></q-item-label>
                 </q-item-section>
                 <q-item-section top>
-                  <q-item-label class="q-mt-sm"> <q-input v-model="exam.observation" dense outlined type="text" autogrow/></q-item-label>
+                  <q-item-label class="q-mt-sm">
+                    <q-input :error="v.observation.$error" error-message="Observação é obrigatório" v-model="v.observation.$model" dense outlined type="text" autogrow
+                  /></q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeExam(exam, index)" /></div>
@@ -114,7 +122,8 @@ export default {
       time: 0,
       hour: '',
       minute: '',
-      second: ''
+      second: '',
+      listFilter: ''
     }
   },
   computed: {
@@ -127,10 +136,16 @@ export default {
     this.$list({ urlDispatch: 'TypesExams/list' })
   },
   methods: {
-    openModal (medicalSchedule) {
+    openModal (medicalSchedule, listFilter) {
       this.medicalSchedule = { ...medicalSchedule }
       // this.startConsult()
       this.showModal = true
+      this.listFilter = listFilter
+    },
+    closeModal () {
+      this.showModal = false
+      this.$v.form.medicalSchedule.prescription_medicaments.medicaments.$reset()
+      this.$v.formRequestExam.requestExam.$reset()
     },
     startConsult () {
       let s = 1
@@ -178,20 +193,24 @@ export default {
       this.form.medicalSchedule.prescription_medicaments.medicaments.splice(index, 1)
     },
     addExam () {
-      this.formRequestExam.requestExam.push({ observation: '', type_exam_id: '' })
+      this.formRequestExam.requestExam.push({ type_exam_id: '', observation: '' })
     },
     removeExam (item, index) {
       this.formRequestExam.requestExam.splice(index, 1)
     },
     verifyParams () {
-      const finishConsult = { id: this.medicalSchedule.id, medicalSchedule: { ...this.form.medicalSchedule }, requestExam: { ...this.formRequestExam.requestExam } }
+      this.verifiyValidations()
+      const finishConsult = {
+        id: this.medicalSchedule.id,
+        medicalSchedule: { ...this.form.medicalSchedule },
+        requestExam: JSON.parse(JSON.stringify(this.formRequestExam.requestExam))
+      }
       if (!this.isReceit) {
-        delete finishConsult.medicalSchedule.prescription_medicaments
+        finishConsult.medicalSchedule.prescription_medicaments = {}
       }
       if (!this.isExam) {
         delete finishConsult.requestExam
       }
-      console.log(finishConsult)
       return finishConsult
     },
     save () {
@@ -203,7 +222,11 @@ export default {
           this.$createOrUpdate({
             urlDispatch: 'MedicalSchedules/finishConsult',
             params,
-            messages: 'Consulta finalizada  com sucesso'
+            messages: 'Consulta finalizada  com sucesso',
+            callback: () => {
+              this.closeModal()
+              this.listFilter()
+            }
           })
         }
       })

@@ -39,7 +39,7 @@
               size="sm"
               dense
               color="secondary"
-              :title="'Iniciar consulta do paciente ' + (!props.row.patient ? '' :  props.row.patient.name)"
+              :title="'Iniciar consulta do paciente ' + (!props.row.patient ? '' : props.row.patient.name)"
               icon="play_arrow"
               class="q-mr-sm"
               @click="startConsult(props.row)"
@@ -104,11 +104,19 @@ export default {
   },
   mounted () {
     this.$refs.medicalScheduleFilter.setForm(this.formFilter)
-    this.$list({ urlDispatch: 'MedicalSchedules/list', params: { ...this.formFilter, date_appointment: this.$formatDateBrInApi(this.formFilter.date_appointment) } })
+    this.listFilter()
   },
   methods: {
+    prepareParams (form) {
+      const formFilterCustom = { ...form }
+      return { ...formFilterCustom, date_appointment: this.$formatDateBrInApi(formFilterCustom.date_appointment) }
+    },
+    listFilter () {
+      const params = this.prepareParams(this.formFilter)
+      this.$list({ urlDispatch: 'MedicalSchedules/list', params })
+    },
     startConsult (row) {
-      this.$refs.modalAppointmentPatient.openModal(row)
+      this.$refs.modalAppointmentPatient.openModal(row, this.listFilter)
     },
     printPrescriptionMedicament (row) {
       printDocument(JSON.stringify(row))
