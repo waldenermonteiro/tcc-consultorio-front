@@ -3,13 +3,11 @@ export default {
   data () {
     return {
       medicalSchedule: { date_appointment: '', patient: { name: '' } },
-      form: { medicalSchedule: { prescription_medicaments: { medicaments: [{ name: '', dosage: '' }] } } },
-      formRequestExam: { requestExam: [{ type_exam_id: '', observation: '' }] },
+      form: { medicalSchedule: { observation: '', prescription_medicaments: { medicaments: [] } } },
+      formRequestExam: { requestExam: [] },
       optionsMedicaments: this.medicaments,
       optionsTypesExams: this.typesExams,
-      showModal: false,
-      isReceit: false,
-      isExam: false
+      showModal: false
     }
   },
   methods: {
@@ -30,12 +28,17 @@ export default {
             $each: {
               name: {
                 required: requiredIf(function () {
-                  return this.isReceit
+                  return this.form.medicalSchedule.prescription_medicaments.medicaments.length !== 0
+                })
+              },
+              qtd: {
+                required: requiredIf(function () {
+                  return this.form.medicalSchedule.prescription_medicaments.medicaments.length !== 0
                 })
               },
               dosage: {
                 required: requiredIf(function () {
-                  return this.isReceit
+                  return this.form.medicalSchedule.prescription_medicaments.medicaments.length !== 0
                 })
               }
             }
@@ -48,12 +51,12 @@ export default {
         $each: {
           type_exam_id: {
             required: requiredIf(function () {
-              return this.isExam
+              return this.formRequestExam.requestExam.length !== 0
             })
           },
           observation: {
             required: requiredIf(function () {
-              return this.isExam
+              return this.formRequestExam.requestExam.length !== 0
             })
           }
         }

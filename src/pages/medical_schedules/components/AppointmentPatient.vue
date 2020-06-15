@@ -11,92 +11,102 @@
           Observações da Consulta:
           <q-input v-model="form.medicalSchedule.observation" outlined type="textarea" autogrow />
         </div>
-        <div class="col-6">
-          <q-toggle v-model="isReceit" @input="$v.form.medicalSchedule.prescription_medicaments.medicaments.$reset()" label="Emitir Receita? " />
-          <div v-if="isReceit">Observações da Receita:<q-input v-model="form.medicalSchedule.prescription_medicaments.observation" outlined type="textarea" autogrow /></div>
-          <div v-if="isReceit" class="col-12 row">
-            <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
-              <div class="row q-mb-sm q-col-gutter-md">
-                <div class="col-6"><b>Medicamentos</b></div>
-                <div class="col-4"><b>Dosagem</b></div>
-                <div class="col-2 text-right">
-                  <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addMedicament()"></q-btn>
-                </div>
+        <div class="col-12">
+          <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
+            <q-tab name="receit" label="Gerar Receita" />
+            <q-tab name="exams" label="Solicitar Exame(s)" />
+          </q-tabs>
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="receit">
+              <div class="col-12 row">
+                <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
+                  <div class="row q-mb-sm q-col-gutter-md">
+                    <div class="col-4"><b>Medicamentos</b></div>
+                    <div class="col-2"><b>Quantidade</b></div>
+                    <div class="col-5"><b>Dosagem</b></div>
+                    <div class="col-1 text-right">
+                      <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addMedicament()"></q-btn>
+                    </div>
+                  </div>
+                  <q-item class="no-padding" v-for="(v, index) in $v.form.medicalSchedule.prescription_medicaments.medicaments.$each.$iter" :key="index">
+                    <q-item-section class="col-4">
+                      <q-item-label>
+                        <q-select
+                          outlined
+                          :options="optionsMedicaments"
+                          option-value="name"
+                          option-label="name"
+                          v-model.trim="v.name.$model"
+                          dense
+                          use-input
+                          emit-value
+                          map-options
+                          @filter="filterMedicament"
+                          :error="v.name.$error"
+                          error-message="Nome do medicamento é obrigatório"
+                        >
+                        </q-select>
+                      </q-item-label>
+                    </q-item-section>
+                    <q-item-section class="col-2">
+                      <q-item-label>
+                        <q-input :error="v.qtd.$error" error-message="Quantidade é obrigatória" v-model="v.qtd.$model" dense outlined type="text" autogrow
+                      /></q-item-label>
+                    </q-item-section>
+                    <q-item-section class="col-5">
+                      <q-item-label>
+                        <q-input :error="v.dosage.$error" error-message="Dosagem é obrigatória" v-model="v.dosage.$model" dense outlined type="text" autogrow
+                      /></q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeMedicament(index)" /></div>
+                    </q-item-section>
+                  </q-item>
+                </q-list></div
+            ></q-tab-panel>
+            <q-tab-panel name="exams">
+              <div class="col-12 row">
+                <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
+                  <div class="row q-pb-sm q-col-gutter-md">
+                    <div class="col-6"><b>Exame</b></div>
+                    <div class="col-4"><b>Observação</b></div>
+                    <div class="col-2 text-right">
+                      <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addExam()"></q-btn>
+                    </div>
+                  </div>
+                  <q-item class="no-padding" v-for="(v, index) in $v.formRequestExam.requestExam.$each.$iter" :key="index">
+                    <q-item-section top class="col-6 gt-sm">
+                      <q-item-label class="q-mt-sm">
+                        <q-select
+                          outlined
+                          :options="optionsTypesExams"
+                          option-value="id"
+                          option-label="name"
+                          v-model.trim="v.type_exam_id.$model"
+                          dense
+                          use-input
+                          emit-value
+                          map-options
+                          @filter="filterTypeExam"
+                          :error="v.type_exam_id.$error"
+                          error-message="Tipo de exame é obrigatório"
+                        >
+                        </q-select
+                      ></q-item-label>
+                    </q-item-section>
+                    <q-item-section top>
+                      <q-item-label class="q-mt-sm">
+                        <q-input :error="v.observation.$error" error-message="Observação é obrigatório" v-model="v.observation.$model" dense outlined type="text" autogrow
+                      /></q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeExam(index)" /></div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
               </div>
-              <q-item class="no-padding" v-for="(v, index) in $v.form.medicalSchedule.prescription_medicaments.medicaments.$each.$iter" :key="index">
-                <q-item-section top class="col-6 gt-sm">
-                  <q-item-label class="q-mt-sm">
-                    <q-select
-                      outlined
-                      :options="optionsMedicaments"
-                      option-value="name"
-                      option-label="name"
-                      v-model.trim="v.name.$model"
-                      dense
-                      use-input
-                      emit-value
-                      map-options
-                      @filter="filterMedicament"
-                      :error="v.name.$error"
-                      error-message="Nome do medicamento é obrigatório"
-                    >
-                    </q-select>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section top>
-                  <q-item-label class="q-mt-sm">
-                    <q-input :error="v.dosage.$error" error-message="Dosagem é obrigatória" v-model="v.dosage.$model" dense outlined type="text" autogrow
-                  /></q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeMedicament(medicament, index)" /></div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-        </div>
-        <div class="col-6">
-          <q-toggle v-model="isExam" @input="$v.formRequestExam.requestExam.$reset()" label="Solicitar Exame? " />
-          <div v-if="isExam" class="col-12 row">
-            <q-list bordered class="rounded-borders col-12 q-pa-sm" style="max-width: 1200px">
-              <div class="row q-pb-sm q-col-gutter-md">
-                <div class="col-6"><b>Exame</b></div>
-                <div class="col-4"><b>Observação</b></div>
-                <div class="col-2 text-right">
-                  <q-btn class="gt-xs" size="14px" flat dense round color="primary" icon="add" @click="addExam()"></q-btn>
-                </div>
-              </div>
-              <q-item class="no-padding" v-for="(v, index) in $v.formRequestExam.requestExam.$each.$iter" :key="index">
-                <q-item-section top class="col-6 gt-sm">
-                  <q-item-label class="q-mt-sm">
-                    <q-select
-                      outlined
-                      :options="optionsTypesExams"
-                      option-value="id"
-                      option-label="name"
-                      v-model.trim="v.type_exam_id.$model"
-                      dense
-                      use-input
-                      emit-value
-                      map-options
-                      @filter="filterTypeExam"
-                      :error="v.type_exam_id.$error"
-                      error-message="Tipo de exame é obrigatório"
-                    >
-                    </q-select
-                  ></q-item-label>
-                </q-item-section>
-                <q-item-section top>
-                  <q-item-label class="q-mt-sm">
-                    <q-input :error="v.observation.$error" error-message="Observação é obrigatório" v-model="v.observation.$model" dense outlined type="text" autogrow
-                  /></q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <div class=""><q-btn class="gt-xs" size="12px" flat dense round color="negative" icon="delete" @click="removeExam(exam, index)" /></div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
+            </q-tab-panel>
+          </q-tab-panels>
         </div>
       </q-card-section>
       <q-card-actions class="row">
@@ -123,7 +133,8 @@ export default {
       hour: '',
       minute: '',
       second: '',
-      listFilter: ''
+      listFilter: '',
+      tab: 'receit'
     }
   },
   computed: {
@@ -141,11 +152,17 @@ export default {
       // this.startConsult()
       this.showModal = true
       this.listFilter = listFilter
+      this.resetForm()
     },
     closeModal () {
       this.showModal = false
       this.$v.form.medicalSchedule.prescription_medicaments.medicaments.$reset()
       this.$v.formRequestExam.requestExam.$reset()
+    },
+    resetForm () {
+      this.form = { medicalSchedule: { observation: '', prescription_medicaments: { medicaments: [] } } }
+      this.formRequestExam.requestExam = []
+      this.tab = 'receit'
     },
     startConsult () {
       let s = 1
@@ -187,15 +204,15 @@ export default {
       })
     },
     addMedicament () {
-      this.form.medicalSchedule.prescription_medicaments.medicaments.push({ name: '', dosage: '' })
+      this.form.medicalSchedule.prescription_medicaments.medicaments.push({ name: '', qtd: '', dosage: '' })
     },
-    removeMedicament (item, index) {
+    removeMedicament (index) {
       this.form.medicalSchedule.prescription_medicaments.medicaments.splice(index, 1)
     },
     addExam () {
       this.formRequestExam.requestExam.push({ type_exam_id: '', observation: '' })
     },
-    removeExam (item, index) {
+    removeExam (index) {
       this.formRequestExam.requestExam.splice(index, 1)
     },
     verifyParams () {
@@ -205,10 +222,10 @@ export default {
         medicalSchedule: { ...this.form.medicalSchedule },
         requestExam: JSON.parse(JSON.stringify(this.formRequestExam.requestExam))
       }
-      if (!this.isReceit) {
+      if (this.form.medicalSchedule.prescription_medicaments.medicaments.length === 0) {
         finishConsult.medicalSchedule.prescription_medicaments = {}
       }
-      if (!this.isExam) {
+      if (this.formRequestExam.requestExam.length === 0) {
         delete finishConsult.requestExam
       }
       return finishConsult
