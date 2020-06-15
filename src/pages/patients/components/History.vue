@@ -2,7 +2,7 @@
   <q-dialog v-model="showModal" persistent>
     <q-card style="width: 1200px; max-width: 80vw;">
       <q-toolbar class="bg-toolbar-custom">
-        <q-toolbar-title class="text-h6 text-center q-ml-xl">Histórico do Paciente {{pacientName}}</q-toolbar-title>
+        <q-toolbar-title class="text-h6 text-center q-ml-xl">Histórico do Paciente {{ pacientName }}</q-toolbar-title>
         <q-btn flat round icon="close" size="sm" @click="showModal = false"></q-btn>
       </q-toolbar>
       <q-card-section class="row q-col-gutter-sm">
@@ -111,6 +111,7 @@
 <script>
 import { mapState } from 'vuex'
 import ListFunctions from '../../medical_schedules/mixins/ListFunctions.mixin'
+import printDocument from '../Print'
 export default {
   mixins: [ListFunctions],
   data () {
@@ -132,6 +133,9 @@ export default {
       this.showModal = true
       this.pacientName = row.name
       this.$list({ urlDispatch: 'MedicalSchedules/list', params: { patient_id: row.id } })
+    },
+    printPrescriptionMedicament (row) {
+      printDocument(row)
     }
   }
 }
