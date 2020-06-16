@@ -16,7 +16,7 @@
             <q-tab-panel name="mails">
               <q-table
                 title="Consultas"
-                :data="medicalSchedules"
+                :data="medicalSchedulesCopy"
                 :columns="columnsHistoryPatient"
                 row-key="id"
                 separator="cell"
@@ -57,7 +57,7 @@
             <q-tab-panel name="alarms">
               <q-table
                 title="Resultado de Exames"
-                :data="medicalSchedules"
+                :data="medicalSchedulesCopy"
                 :columns="columnsHistoryPatient"
                 row-key="id"
                 separator="cell"
@@ -121,18 +121,38 @@ export default {
         rowsPerPage: 5
       },
       tab: 'mails',
-      pacientName: ''
+      pacientName: '',
+      medicalSchedulesCopy: []
     }
   },
   computed: {
     ...mapState('Patients', ['resultCreate', 'optionsUfs', 'cepInformations']),
-    ...mapState('MedicalSchedules', ['medicalSchedules', 'columnsHistoryPatient'])
+    ...mapState('MedicalSchedules', ['medicalSchedules', 'medicalSchedulesCustom', 'columnsHistoryPatient'])
   },
   methods: {
     openModal (row) {
       this.showModal = true
       this.pacientName = row.name
-      this.$list({ urlDispatch: 'MedicalSchedules/list', params: { patient_id: row.id } })
+      if (row.hasDiferent) {
+        this.$list({
+          urlDispatch: 'MedicalSchedules/listCustom',
+          params: { patient_id: row.id },
+          callback: () => {
+            this.setValueInArray(row)
+          }
+        })
+      } else {
+        this.$list({
+          urlDispatch: 'MedicalSchedules/list',
+          params: { patient_id: row.id },
+          callback: () => {
+            this.setValueInArray(row)
+          }
+        })
+      }
+    },
+    setValueInArray (row) {
+      this.medicalSchedulesCopy = row.hasDiferent ? JSON.parse(JSON.stringify(this.medicalSchedulesCustom)) : JSON.parse(JSON.stringify(this.medicalSchedules))
     },
     printPrescriptionMedicament (row) {
       printDocument(row)

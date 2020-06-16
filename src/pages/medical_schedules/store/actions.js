@@ -8,6 +8,14 @@ export async function list ({ commit }, params) {
     throw error
   }
 }
+export async function listCustom ({ commit }, params) {
+  try {
+    const { data } = await MedicalSchedulesService.list(params)
+    commit('LIST_DIFERENT', data)
+  } catch (error) {
+    throw error
+  }
+}
 export async function create ({ commit }, params) {
   try {
     await MedicalSchedulesService.create(params)
