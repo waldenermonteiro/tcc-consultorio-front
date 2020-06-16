@@ -2,11 +2,12 @@
   <q-dialog v-model="showModal" persistent>
     <q-card style="width: 1200px; max-width: 100vw;">
       <q-toolbar class="bg-toolbar-custom">
-        <q-toolbar-title class="text-h5 text-center q-ml-xl q-pa-md">Consulta Paciente: {{ this.medicalSchedule.patient.name }}</q-toolbar-title>
+        <q-toolbar-title class="text-h5 text-center q-ml-xl q-pa-md">Consulta Paciente: {{ medicalSchedule.patient.name }}</q-toolbar-title>
         <q-btn flat round icon="close" size="sm" @click="showModal = false"></q-btn>
       </q-toolbar>
-      <div class="text-h6 text-center">Hora marcada: {{ $formatHourBr(this.medicalSchedule.date_appointment) }}</div>
+      <div class="text-h6 text-center">Hora marcada: {{ $formatHourBr(medicalSchedule.date_appointment) }}</div>
       <q-card-section class="row q-col-gutter-sm">
+        <div class="col-12 text-right"><q-btn size="sm" icon="history" label="Histórico do paciente" @click="historyPatient(medicalSchedule)" color="info"></q-btn></div>
         <div class="col-12">
           Observações da Consulta:
           <q-input v-model="form.medicalSchedule.observation" outlined type="textarea" autogrow />
@@ -119,13 +120,18 @@
         </div>
       </q-card-actions>
     </q-card>
+    <patients-history ref="modalHistoryPatient"></patients-history>
   </q-dialog>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import CreateConsultValidor from '../mixins/CreateConsultValidator'
+import History from '../../patients/components/History'
 export default {
+  components: {
+    'patients-history': History
+  },
   mixins: [CreateConsultValidor],
   data () {
     return {
@@ -163,6 +169,9 @@ export default {
       this.form = { medicalSchedule: { observation: '', prescription_medicaments: { medicaments: [] } } }
       this.formRequestExam.requestExam = []
       this.tab = 'receit'
+    },
+    historyPatient (medicalSchedule) {
+      this.$refs.modalHistoryPatient.openModal({ ...medicalSchedule.patient, hasDiferent: true })
     },
     startConsult () {
       let s = 1
