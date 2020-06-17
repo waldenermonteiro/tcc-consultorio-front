@@ -171,7 +171,7 @@ export default {
       this.tab = 'receit'
     },
     historyPatient (medicalSchedule) {
-      this.$refs.modalHistoryPatient.openModal({ ...medicalSchedule.patient, hasDiferent: true })
+      this.$refs.modalHistoryPatient.openModal({ ...medicalSchedule, hasDiferent: true })
     },
     startConsult () {
       let s = 1
