@@ -5,6 +5,7 @@ import MedicalSchedules from '../pages/medical_schedules/store'
 import Medicaments from '../pages/medicaments/store'
 import Patients from '../pages/patients/store'
 import Profiles from '../pages/profiles/store'
+import ResultExams from '../pages/result_exams/store'
 import Specialities from '../pages/specialities/store'
 import TypesExams from '../pages/types_exams/store'
 import Users from '../pages/users/store'
@@ -18,6 +19,7 @@ export default function (/* { ssrContext } */) {
       Medicaments,
       Patients,
       Profiles,
+      ResultExams,
       Specialities,
       TypesExams,
       Users
