@@ -47,7 +47,7 @@
                       color="grey"
                       :title="'Imprimir Receita Médica'"
                       icon="print"
-                      class="q-mr-sm"
+                      class="q-mr-sm absolute-center"
                       @click="printPrescriptionMedicament(props.row, props.row.date_appointment)"
                     ></q-btn>
                   </q-td>
@@ -57,8 +57,8 @@
             <q-tab-panel name="alarms">
               <q-table
                 title="Resultado de Exames"
-                :data="medicalSchedulesCopy"
-                :columns="columnsHistoryPatient"
+                :data="resultExams"
+                :columns="columnsResultExamsHistoryPatient"
                 row-key="id"
                 separator="cell"
                 :pagination.sync="pagination"
@@ -69,27 +69,21 @@
                     <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-bold text-dark bg-grey-3">{{ col.label }}</q-th>
                   </q-tr>
                 </template>
-                <template v-slot:body-cell-date_appointment="props">
-                  <q-td key="date_appointment" :props="props">
-                    {{ $formatDateAndHourBr(props.row.date_appointment) }}
-                  </q-td>
-                </template>
-                <template v-slot:body-cell-employee="props">
-                  <q-td key="employee" :props="props">
-                    {{ props.row.employee.name }}
+                <template v-slot:body-cell-created_at="props">
+                  <q-td key="created_at" :props="props">
+                    {{ $formatDateAndHourBrEmptyT(props.row.created_at) }}
                   </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
                   <q-td key="actions">
                     <q-btn
-                      v-if="verifyPrescriptionMedicamentIsEmpty(props.row.prescription_medicaments)"
                       size="sm"
                       dense
                       color="grey"
-                      :title="'Imprimir Receita Médica ' + props.row.prescription_medicaments"
+                      :title="'Imprimir Resultado de Exame'"
                       icon="print"
-                      class="q-mr-sm"
-                      @click="printPrescriptionMedicament(props.row, props.row.date_appointment)"
+                      class="q-mr-sm absolute-center"
+                      @click="printResultExam(props.row.result)"
                     ></q-btn>
                   </q-td>
                 </template>
@@ -127,35 +121,43 @@ export default {
   },
   computed: {
     ...mapState('Patients', ['resultCreate', 'optionsUfs', 'cepInformations']),
-    ...mapState('MedicalSchedules', ['medicalSchedules', 'medicalSchedulesCustom', 'columnsHistoryPatient'])
+    ...mapState('MedicalSchedules', ['medicalSchedules', 'medicalSchedulesCustom', 'columnsHistoryPatient']),
+    ...mapState('ResultExams', ['resultExams', 'columnsResultExamsHistoryPatient'])
   },
   methods: {
-    openModal (row) {
+    openModal (medicalScheduleOrPatient) {
       this.showModal = true
-      this.pacientName = row.name
-      if (row.hasDiferent) {
+      this.pacientName = medicalScheduleOrPatient.name
+      if (medicalScheduleOrPatient.hasDiferent) {
         this.$list({
           urlDispatch: 'MedicalSchedules/listCustom',
-          params: { patient_id: row.id },
+          params: { patient_id: medicalScheduleOrPatient.patient.id },
           callback: () => {
-            this.setValueInArray(row)
+            this.setValueInArray(medicalScheduleOrPatient)
           }
+        })
+        this.$list({
+          urlDispatch: 'ResultExams/list',
+          params: { patient_id: medicalScheduleOrPatient.patient.id }
         })
       } else {
         this.$list({
           urlDispatch: 'MedicalSchedules/list',
-          params: { patient_id: row.id },
+          params: { patient_id: medicalScheduleOrPatient.id },
           callback: () => {
-            this.setValueInArray(row)
+            this.setValueInArray(medicalScheduleOrPatient)
           }
         })
       }
     },
-    setValueInArray (row) {
-      this.medicalSchedulesCopy = row.hasDiferent ? JSON.parse(JSON.stringify(this.medicalSchedulesCustom)) : JSON.parse(JSON.stringify(this.medicalSchedules))
+    setValueInArray (medicalSchedule) {
+      this.medicalSchedulesCopy = medicalSchedule.hasDiferent ? JSON.parse(JSON.stringify(this.medicalSchedulesCustom)) : JSON.parse(JSON.stringify(this.medicalSchedules))
     },
-    printPrescriptionMedicament (row) {
-      printDocument(row)
+    printPrescriptionMedicament (medicalSchedule) {
+      printDocument(medicalSchedule)
+    },
+    printResultExam (result) {
+      console.log(result)
     }
   }
 }
