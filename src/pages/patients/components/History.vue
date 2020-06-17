@@ -8,12 +8,12 @@
       <q-card-section class="row q-col-gutter-sm">
         <div class="col-12">
           <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-            <q-tab name="mails" label="Consultas" />
-            <q-tab name="alarms" label="Resultados de Exames" />
+            <q-tab name="consults" label="Consultas" />
+            <q-tab name="receits" label="Resultados de Exames" />
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="mails">
+            <q-tab-panel name="consults">
               <q-table
                 title="Consultas"
                 :data="medicalSchedulesCopy"
@@ -54,7 +54,7 @@
                 </template>
               </q-table>
             </q-tab-panel>
-            <q-tab-panel name="alarms">
+            <q-tab-panel name="receits">
               <q-table
                 title="Resultado de Exames"
                 :data="resultExams"
@@ -114,7 +114,7 @@ export default {
       pagination: {
         rowsPerPage: 5
       },
-      tab: 'mails',
+      tab: 'consults',
       pacientName: '',
       medicalSchedulesCopy: []
     }
@@ -127,28 +127,21 @@ export default {
   methods: {
     openModal (medicalScheduleOrPatient) {
       this.showModal = true
+      this.tab = 'consults'
       this.pacientName = medicalScheduleOrPatient.name
-      if (medicalScheduleOrPatient.hasDiferent) {
-        this.$list({
-          urlDispatch: 'MedicalSchedules/listCustom',
-          params: { patient_id: medicalScheduleOrPatient.patient.id },
-          callback: () => {
-            this.setValueInArray(medicalScheduleOrPatient)
-          }
-        })
-        this.$list({
-          urlDispatch: 'ResultExams/list',
-          params: { patient_id: medicalScheduleOrPatient.patient.id }
-        })
-      } else {
-        this.$list({
-          urlDispatch: 'MedicalSchedules/list',
-          params: { patient_id: medicalScheduleOrPatient.id },
-          callback: () => {
-            this.setValueInArray(medicalScheduleOrPatient)
-          }
-        })
-      }
+      const urlDispatch = medicalScheduleOrPatient.hasDiferent ? 'MedicalSchedules/listCustom' : 'MedicalSchedules/list'
+      const patientId = medicalScheduleOrPatient.hasDiferent ? medicalScheduleOrPatient.patient.id : medicalScheduleOrPatient.id
+      this.$list({
+        urlDispatch,
+        params: { patient_id: patientId },
+        callback: () => {
+          this.setValueInArray(medicalScheduleOrPatient)
+        }
+      })
+      this.$list({
+        urlDispatch: 'ResultExams/list',
+        params: { patient_id: patientId }
+      })
     },
     setValueInArray (medicalSchedule) {
       this.medicalSchedulesCopy = medicalSchedule.hasDiferent ? JSON.parse(JSON.stringify(this.medicalSchedulesCustom)) : JSON.parse(JSON.stringify(this.medicalSchedules))
