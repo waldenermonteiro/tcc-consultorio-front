@@ -61,6 +61,12 @@ export default {
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
     },
+    $formatDateAndHourBrEmptyT (date) {
+      if (date === null || date === '') return ''
+      const pattern = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
+    },
     $formatHourBr (date) {
       if (date === null || date === '') return ''
       const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
