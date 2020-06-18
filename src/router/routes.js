@@ -63,6 +63,12 @@ const routes = [
         name: 'Tipos de Exames',
         component: () => import('pages/types_exams/List.vue'),
         meta: { roles: ['Medico', 'patient'], name: 'Tipos de Exames  ', icons: 'home' }
+      },
+      {
+        path: '/requisicoesExames',
+        name: 'Requisições de Exames',
+        component: () => import('pages/request_exams/List.vue'),
+        meta: { roles: ['Medico', 'patient'], name: 'Requisições de Exames  ', icons: 'home' }
       }
     ]
   }
