@@ -11,8 +11,7 @@ export async function list ({ commit }, params) {
 }
 export async function create ({ commit }, params) {
   try {
-    const { data } = await ResultExamsService.create(params)
-    commit('SET_RESULT_CREATE', data)
+    await ResultExamsService.create(params)
   } catch (error) {
     throw error
   }
