@@ -1,5 +1,5 @@
 const formatCPFCNPJ = (val = '', type = '') => {
-  let cpfCnpj = { ...{ val } }
+  const cpfCnpj = { ...{ val } }
   cpfCnpj.val = addZeroLeftMaskCpfCnpj(cpfCnpj.val.toString(), type)
   return cpfCnpj.val === null
     ? ''
@@ -51,19 +51,25 @@ const formatDate = val => {
   function pad (val) {
     return val < 10 ? '0' + val : val
   }
-  let d = new Date(val)
+  const d = new Date(val)
   return !val ? '' : [pad(d.getMonth() + 1), pad(d.getDate()), d.getFullYear()].join('/')
 }
 const formatDateBr = date => {
   if (date === null) return ''
-  let pattern = /(\d{4})-(\d{2})-(\d{2})/g
-  let getDate = pattern.exec(date)[0]
+  const pattern = /(\d{4})-(\d{2})-(\d{2})/g
+  const getDate = pattern.exec(date)[0]
   return getDate.replace(pattern, '$3/$2/$1')
 }
-const formatDateBrInApi = (date) => {
+const formatDateAndHourBr = date => {
+  if (date === null || date === '') return ''
+  const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
+  const getDate = pattern.exec(date)[0]
+  return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
+}
+const formatDateBrInApi = date => {
   if (date === null) return ''
-  let pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
-  let getDate = pattern.exec(date)[0]
+  const pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
+  const getDate = pattern.exec(date)[0]
   return getDate.replace(pattern, '$3-$2-$1')
 }
 const formatDateApi = val => {
@@ -78,10 +84,10 @@ const formatAgencyBank = agency => {
 }
 const formatAccountBank = account => {
   account = account.toString()
-  let patt = /^([0-9]{7})$/
+  const patt = /^([0-9]{7})$/
   patt.test(account)
-  let lastChar = account.substr(account.length - 1)
-  let xStr = account.substring(0, account.length - 1)
+  const lastChar = account.substr(account.length - 1)
+  const xStr = account.substring(0, account.length - 1)
   return addZeroLeftString(xStr + '-' + lastChar, 11)
 }
 const formatCurrencyBrazil = value => {
@@ -96,8 +102,8 @@ const setMoneyApi = value => {
 }
 const convertToNumberApi = value => {
   value = value.replace(/[^0-9]/g, '')
-  let lastChar = value.substr(value.length - 2)
-  let xStr = value.substring(0, value.length - 2)
+  const lastChar = value.substr(value.length - 2)
+  const xStr = value.substring(0, value.length - 2)
   return parseFloat(xStr + '.' + lastChar)
 }
 
@@ -116,6 +122,7 @@ export {
   formatAccountBank,
   formatDate,
   formatDateBr,
+  formatDateAndHourBr,
   formatDateBrInApi,
   formatCurrencyBrazil,
   formatDateApi,

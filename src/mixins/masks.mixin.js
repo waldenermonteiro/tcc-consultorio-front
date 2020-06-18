@@ -50,19 +50,37 @@ export default {
       return s
     },
     $formatDateBr (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{4})-(\d{2})-(\d{2})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1')
     },
     $formatDateAndHourBr (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
     },
+    $formatDateAndHourBrEmptyT (date) {
+      if (date === null || date === '') return ''
+      const pattern = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
+    },
+    $formatHourBr (date) {
+      if (date === null || date === '') return ''
+      const pattern = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$4:$5:$6')
+    },
+    $formatDateAndHourBrInApi (date) {
+      if (date === null || date === '') return ''
+      const pattern = /(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/g
+      const getDate = pattern.exec(date)[0]
+      return getDate.replace(pattern, '$3-$2-$1 $4:$5:$6')
+    },
     $formatDateBrInApi (date) {
-      if (date === null) return ''
+      if (date === null || date === '') return ''
       const pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
       const getDate = pattern.exec(date)[0]
       return getDate.replace(pattern, '$3-$2-$1')
@@ -80,6 +98,13 @@ export default {
       }
       var d = new Date(val)
       return !val ? '' : [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join('-')
+    },
+    $formatDateAndHourApi (val) {
+      function pad (val) {
+        return val < 10 ? '0' + val : val
+      }
+      var d = new Date(val)
+      return !val ? '' : [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join('-') + 'T' + [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':')
     },
     $formatAgencyBank (agency) {
       return this.addZeroLeftString(agency, 4)

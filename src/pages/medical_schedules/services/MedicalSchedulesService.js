@@ -13,4 +13,13 @@ export default new (class EmployeesService extends base {
       throw this.statusResponse(error, 'update')
     }
   };
+
+  finishConsult = async ($data, $id) => {
+    try {
+      const response = await this.service.patch(`${this.api}/finishConsult/${$id}`, $data)
+      return response
+    } catch (error) {
+      throw this.statusResponse(error, 'update')
+    }
+  };
 })()

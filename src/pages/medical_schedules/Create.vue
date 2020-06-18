@@ -40,9 +40,9 @@
         </div>
         <div class="col-6">
           Data*:
-          {{ form.date_appointment }}
           <q-input
             outlined
+            readonly
             v-model="form.date_appointment"
             dense
             @click="$refs.qDateAppointment.show()"
@@ -53,7 +53,7 @@
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
                   <q-date color="primary" v-model="form.date_appointment" :options="optionsFn" mask="DD/MM/YYYY HH:mm:ss" />
-                  <q-time color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
+                  <q-time :hour-options="hourOptions" :minute-options="minuteOptions" color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -69,7 +69,6 @@
             v-model="form.patient_id"
             dense
             use-input
-            bottom-slots
             emit-value
             map-options
             @filter="filterPatient"
@@ -77,11 +76,12 @@
             :error="$v.form.patient_id.$error"
             @input="$v.form.patient_id.$touch"
             error-message="Paciente é obrigatório"
+            hint="Digite para pesquisar um paciente"
           >
           </q-select>
         </div>
         <div class="col-6">
-          Novo Paciente?<br>
+          Novo Paciente?<br />
           <q-toggle v-model="verifyNewPatient" color="primary" label="Sim" />
         </div>
       </q-card-section>
@@ -89,8 +89,8 @@
 
       <q-card-actions class="row">
         <div class="col-12 text-right">
-          <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
+          <q-btn size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -107,7 +107,10 @@ export default {
     return {
       showModal: false,
       isEdit: false,
-      optionsPatients: []
+      optionsPatients: [],
+      hourOptions: [8, 9, 10, 11, 14, 15, 16, 17, 18],
+      minuteOptions: [0, 15, 30, 45],
+      defaultDate: new Date().setHours(8, 0, 0)
     }
   },
   computed: {
@@ -120,12 +123,11 @@ export default {
     this.optionsPatients = [...this.patients]
   },
   methods: {
-    filterPatient (val, update) {
+    filterPatient (val, update, abort) {
       update(() => {
-        if (val === '') {
-          update(() => {
-            this.optionsPatients = [...this.patients]
-          })
+        if (val.length < 2) {
+          abort()
+          return ''
         } else {
           const needle = val.toLowerCase()
           this.optionsPatients = this.patients.filter(v => v.name.toLowerCase().indexOf(needle) > -1)
@@ -133,7 +135,7 @@ export default {
       })
     },
     optionsFn (data) {
-      return data <= date.formatDate(new Date(), 'YYYY/MM/DD HH:mm:ss')
+      return data >= date.formatDate(new Date(), 'YYYY/MM/DD') && new Date(data).getDay() !== 0
     },
     openModal () {
       this.resetForm()
@@ -143,17 +145,18 @@ export default {
     openModalEdit (form) {
       this.openModal()
       this.isEdit = true
-      this.form = { ...form }
+      this.form = { ...form, date_appointment: this.$formatDateAndHourBr(form.date_appointment) }
     },
     resetForm () {
+      this.optionsPatients = []
       this.isEdit = false
-      this.form = { ...this.formCopy }
+      this.form = { ...this.formCopy, date_appointment: this.$formatDateAndHourBr(this.$formatDateAndHourApi(this.defaultDate)) }
     },
     verifyTypeAction () {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     prepareMedicalSchedule (form) {
-      const medicalSchedulePrepared = { ...form, date_appointment: date.formatDate(form.date_appointment, 'YYYY-MM-DD HH:mm:ss'), status: 'Agendada' }
+      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourBrInApi(form.date_appointment), status: 'Agendada' }
       delete form.patient
       delete form.employee
       return medicalSchedulePrepared

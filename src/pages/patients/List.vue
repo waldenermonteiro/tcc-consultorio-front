@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table dense title="Treats" :data="patients" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
+      <q-table title="Treats" :data="patients" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
           <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
@@ -9,7 +9,7 @@
             </template>
           </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo Paciente" @click="createPatient()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo Paciente" @click="createPatient()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -24,22 +24,26 @@
 
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn size="xs" dense color="positive" :title="'Visualizar paciente ' + props.row.name" icon="search" class="q-mr-sm" @click="viewPatient(props.row)"></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar paciente ' + props.row.name" icon="edit" class="q-mr-sm" @click="updatePatient(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir paciente ' + props.row.name" icon="delete" @click="removePatient(props.row)"></q-btn>
+            <q-btn size="sm" dense color="info" :title="'Histórico do paciente ' + props.row.name" icon="history" class="q-mr-sm" @click="historyPatient(props.row)"></q-btn>
+            <q-btn size="sm" dense color="positive" :title="'Visualizar paciente ' + props.row.name" icon="search" class="q-mr-sm" @click="viewPatient(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar paciente ' + props.row.name" icon="edit" class="q-mr-sm" @click="updatePatient(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir paciente ' + props.row.name" icon="delete" @click="removePatient(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
       <patients-create ref="modalPatient"></patients-create>
+      <patients-history ref="modalHistoryPatient"></patients-history>
     </div>
   </q-page>
 </template>
 <script>
 import { mapState } from 'vuex'
 import Create from './Create.vue'
+import History from './components/History'
 export default {
   components: {
-    'patients-create': Create
+    'patients-create': Create,
+    'patients-history': History
   },
   data () {
     return {
@@ -64,6 +68,9 @@ export default {
     },
     viewPatient (row) {
       this.$refs.modalPatient.openModalView(JSON.parse(JSON.stringify(row)))
+    },
+    historyPatient (row) {
+      this.$refs.modalHistoryPatient.openModal(JSON.parse(JSON.stringify(row)))
     },
     removePatient (row) {
       this.$setDialogQuestion({

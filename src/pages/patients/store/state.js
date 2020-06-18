@@ -2,6 +2,7 @@ export default function () {
   return {
     patients: [],
     resultCreate: {},
+    cepInformations: {},
     columns: [
       { name: 'id', align: 'center', label: 'Id', field: 'id', sortable: true },
       { name: 'name', align: 'center', label: 'Nome', field: 'name', sortable: true },

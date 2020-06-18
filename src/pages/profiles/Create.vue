@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import CreateValidator from './mixins/CreateValidator'
+import CreateValidator from './mixins/CreateValidator.mixin'
 export default {
   mixins: [CreateValidator],
   data () {
