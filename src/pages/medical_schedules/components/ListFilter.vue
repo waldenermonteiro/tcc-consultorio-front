@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <div class="row justify-center q-col-gutter-sm ">
-      <div class="col-3">
+      <div class="col-3" v-if="!hideMedic">
         Médico:
         <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
           <template v-if="formFilter.employee_id" v-slot:append>
@@ -79,6 +79,10 @@ export default {
       required: false,
       default: false
     },
+    hideMedic: {
+      required: false,
+      default: false
+    },
     action: {
       required: false
     }
@@ -129,13 +133,8 @@ export default {
       this.$list({ urlDispatch: this.action, params })
     },
     clearForm () {
-      this.formFilter = { ...this.formFilterCopy }
-      this.$list({
-        urlDispatch: this.action,
-        callback: () => {
-          this.optionsPatients = this.patients
-        }
-      })
+      this.formFilter = this.hideMedic ? { ...this.formFilterCopy, employee_id: this.formFilter.employee_id } : { ...this.formFilterCopy }
+      this.send()
     },
     clearInput (prop) {
       this.formFilter[prop] = ''
