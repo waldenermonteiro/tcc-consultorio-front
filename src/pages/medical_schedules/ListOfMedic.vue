@@ -1,9 +1,6 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <div class="row justify-center">
-        <medical-schedules-filter ref="medicalScheduleFilter" action="MedicalSchedules/list" :hidePatient="true" :hideMedic="true" :setForm="formFilter" class="col-12"></medical-schedules-filter>
-      </div>
       <q-table
         title="Treats"
         :data="medicalSchedules"
@@ -15,6 +12,11 @@
         table-style="material striped"
       >
         <template v-slot:top>
+          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
           <q-space />
         </template>
         <template v-slot:header="props">
@@ -74,14 +76,12 @@
 <script>
 import { mapState } from 'vuex'
 import AppointmentPatient from './components/AppointmentPatient'
-import MedicalSchedulesFilter from './components/ListFilter'
 import printDocument from './Print'
 import ListFunctions from './mixins/ListFunctions.mixin'
 export default {
   mixins: [ListFunctions],
   components: {
-    'appointment-patient': AppointmentPatient,
-    'medical-schedules-filter': MedicalSchedulesFilter
+    'appointment-patient': AppointmentPatient
   },
   data () {
     return {
@@ -103,7 +103,6 @@ export default {
     ...mapState('Patients', ['resultCreate'])
   },
   mounted () {
-    this.$refs.medicalScheduleFilter.setForm(this.formFilter)
     this.listFilter()
   },
   methods: {
