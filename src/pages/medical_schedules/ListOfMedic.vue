@@ -2,7 +2,7 @@
   <q-page>
     <div class="q-pa-md">
       <div class="row justify-center">
-        <medical-schedules-filter ref="medicalScheduleFilter" action="MedicalSchedules/list" :hidePatient="true" :setForm="formFilter" class="col-12"></medical-schedules-filter>
+        <medical-schedules-filter ref="medicalScheduleFilter" action="MedicalSchedules/list" :hidePatient="true" :hideMedic="true" :setForm="formFilter" class="col-12"></medical-schedules-filter>
       </div>
       <q-table
         title="Treats"
