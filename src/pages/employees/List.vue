@@ -2,7 +2,6 @@
   <q-page>
     <div class="q-pa-md">
       <q-table
-        dense
         title="Treats"
         :data="employees"
         :columns="columns"
@@ -43,9 +42,9 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn size="xs" dense color="positive" :title="'Visualizar funcionário ' + props.row.name" icon="search" class="q-mr-sm" @click="viewEmployee(props.row)"></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar funcionário ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateEmployee(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir funcionário ' + props.row.name" icon="delete" @click="removeEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="positive" :title="'Visualizar funcionário ' + props.row.name" icon="search" class="q-mr-sm" @click="viewEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar funcionário ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir funcionário ' + props.row.name" icon="delete" @click="removeEmployee(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>

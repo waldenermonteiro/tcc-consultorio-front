@@ -2,7 +2,6 @@
   <q-page>
     <div class="q-pa-md">
       <q-table
-        dense
         title="Treats"
         :data="typesExams"
         :columns="columns"
@@ -37,8 +36,8 @@
               class="q-mr-sm"
               @click="viewTypeExam(props.row)"
             ></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar tipo de exame ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateTypeExam(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir tipo de exame ' + props.row.name" icon="delete" @click="removeTypeExam(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar tipo de exame ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateTypeExam(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir tipo de exame ' + props.row.name" icon="delete" @click="removeTypeExam(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
