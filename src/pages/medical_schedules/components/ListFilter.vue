@@ -29,7 +29,7 @@
           </template>
         </q-select>
       </div>
-      <div class="col-3">
+      <div class="col-3" v-if="!hideDate">
         Data:
         <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
           <template v-slot:append>
@@ -74,6 +74,13 @@ export default {
     hideStatus: {
       required: false,
       default: false
+    },
+    hideDate: {
+      required: false,
+      default: false
+    },
+    action: {
+      required: false
     }
   },
   data () {
@@ -119,12 +126,12 @@ export default {
     },
     send () {
       const params = this.prepareParams(this.formFilter)
-      this.$list({ urlDispatch: 'MedicalSchedules/list', params })
+      this.$list({ urlDispatch: this.action, params })
     },
     clearForm () {
       this.formFilter = { ...this.formFilterCopy }
       this.$list({
-        urlDispatch: 'MedicalSchedules/list',
+        urlDispatch: this.action,
         callback: () => {
           this.optionsPatients = this.patients
         }
