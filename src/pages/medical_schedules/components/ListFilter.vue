@@ -1,6 +1,32 @@
 <template>
   <div class="q-pa-sm">
     <div class="row justify-center q-col-gutter-sm ">
+      <div class="col-3" v-if="!hideCreatedAt">
+        Data:
+        <q-input outlined v-model="formFilter.created_at" dense @click="$refs.qDateAppointment.show()">
+          <template v-slot:append>
+            <q-icon v-if="formFilter.created_at" name="cancel" @click="clearInput('created_at')" class="cursor-pointer" />
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
+                <q-date color="primary" v-model="formFilter.created_at" mask="DD/MM/YYYY" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
+      <div class="col-3" v-if="!hideDate">
+        Data:
+        <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
+          <template v-slot:append>
+            <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
+                <q-date color="primary" v-model="formFilter.date_appointment" mask="DD/MM/YYYY" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
       <div class="col-3" v-if="!hideMedic">
         Médico:
         <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
@@ -28,19 +54,6 @@
             <q-icon name="cancel" @click.stop="clearInput('patient_id')" class="cursor-pointer" />
           </template>
         </q-select>
-      </div>
-      <div class="col-3" v-if="!hideDate">
-        Data:
-        <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
-          <template v-slot:append>
-            <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
-                <q-date color="primary" v-model="formFilter.date_appointment" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
       </div>
       <div class="col-3" v-if="!hideStatus">
         Status:
@@ -75,6 +88,10 @@ export default {
       required: false,
       default: false
     },
+    hideCreatedAt: {
+      required: false,
+      default: false
+    },
     hideDate: {
       required: false,
       default: false
@@ -90,6 +107,7 @@ export default {
   data () {
     return {
       formFilter: {
+        created_at: '',
         employee_id: '',
         patient_id: '',
         date_appointment: '',
@@ -126,6 +144,7 @@ export default {
     prepareParams (form) {
       const formCustom = { ...form }
       formCustom.date_appointment = this.$formatDateBrInApi(this.formFilter.date_appointment)
+      formCustom.created_at = this.$formatDateBrInApi(this.formFilter.created_at)
       return formCustom
     },
     send () {
