@@ -27,14 +27,6 @@
           </template>
         </q-input>
       </div>
-      <div class="col-3" v-if="!hideMedic">
-        Médico:
-        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
-          <template v-if="formFilter.employee_id" v-slot:append>
-            <q-icon name="cancel" @click.stop="clearInput('employee_id')" class="cursor-pointer" />
-          </template>
-        </q-select>
-      </div>
       <div class="col-3" v-if="!hidePatient">
         Paciente:
         <q-select
@@ -52,6 +44,14 @@
         >
           <template v-if="formFilter.patient_id" v-slot:append>
             <q-icon name="cancel" @click.stop="clearInput('patient_id')" class="cursor-pointer" />
+          </template>
+        </q-select>
+      </div>
+      <div class="col-3" v-if="!hideMedic">
+        Médico:
+        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
+          <template v-if="formFilter.employee_id" v-slot:append>
+            <q-icon name="cancel" @click.stop="clearInput('employee_id')" class="cursor-pointer" />
           </template>
         </q-select>
       </div>
