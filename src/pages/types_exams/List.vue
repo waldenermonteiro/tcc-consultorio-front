@@ -1,16 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table
-        title="Treats"
-        :data="typesExams"
-        :columns="columns"
-        row-key="id"
-        :filter="filter"
-        separator="cell"
-        :pagination.sync="pagination"
-        table-style="material striped"
-      >
+      <q-table title="Treats" :data="typesExams" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
           <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
@@ -28,7 +19,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
             <q-btn
-              size="xs"
+              size="sm"
               dense
               color="positive"
               :title="'Visualizar informações do tipo de exame ' + props.row.name"
