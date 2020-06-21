@@ -1,8 +1,13 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <medical-schedules-filter action="ResultExams/list" class="col-12" :hideDate="true" :hideStatus="true"></medical-schedules-filter>
-      <q-table :data="resultExams" :columns="columns" row-key="id" separator="cell" :pagination.sync="pagination" table-style="material striped">
+      <div class="row justify-center">
+        <medical-schedules-filter action="ResultExams/list" class="col-12" :hideDate="true" :hideStatus="true"></medical-schedules-filter>
+      </div>
+      <q-table title="" :data="resultExams" :columns="columns" row-key="id" separator="cell" :pagination.sync="pagination" table-style="material striped">
+        <template v-slot:top>
+          <q-space />
+        </template>
         <template v-slot:header="props">
           <q-tr :props="props">
             <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-bold text-dark bg-grey-3">{{ col.label }}</q-th>
