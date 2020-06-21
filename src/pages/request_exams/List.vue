@@ -1,13 +1,11 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table title="Treats" :data="requestExams" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
+      <div class="row justify-center">
+        <result-exams-filter ref="ResultExamFilter" class="col-12"></result-exams-filter>
+      </div>
+      <q-table title="" :data="requestExams" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
-          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
           <q-space />
         </template>
         <template v-slot:header="props">
@@ -52,15 +50,20 @@
 <script>
 import { mapState } from 'vuex'
 import CreateResultExam from './components/CreateResultExam'
+import ResultExamsFilter from './components/ListFilter'
 export default {
   components: {
-    CreateResultExam
+    CreateResultExam,
+    ResultExamsFilter
   },
   data () {
     return {
       filter: '',
       pagination: {
         rowsPerPage: 10
+      },
+      formFilter: {
+        status: 'Agendado'
       }
     }
   },
@@ -68,7 +71,9 @@ export default {
     ...mapState('RequestExams', ['requestExams', 'columns'])
   },
   mounted () {
-    this.$list({ urlDispatch: 'RequestExams/list' })
+    this.$list({ urlDispatch: 'RequestExams/list', params: this.formFilter })
+    this.$refs.ResultExamFilter.setForm(this.formFilter)
+    // this.$list({ urlDispatch: 'RequestExams/list', params: { status: 'Agendado' } })
   },
   methods: {
     setResultExam (row) {
