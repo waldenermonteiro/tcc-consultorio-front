@@ -18,7 +18,7 @@
             </template>
           </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo medicamento" @click="createMedicament()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo medicamento" @click="createMedicament()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">

@@ -9,7 +9,7 @@
             </template>
           </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo Perfil" @click="createProfile()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo Perfil" @click="createProfile()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
