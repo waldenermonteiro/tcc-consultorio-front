@@ -56,7 +56,7 @@ export default {
     return {
       showModal: false,
       pagination: {
-        rowsPerPage: 5
+        rowsPerPage: 10
       }
     }
   },
