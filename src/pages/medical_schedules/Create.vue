@@ -53,7 +53,7 @@
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
                   <q-date color="primary" v-model="form.date_appointment" :options="optionsFn" mask="DD/MM/YYYY HH:mm:ss" />
-                  <q-time :hour-options="hourOptions" :minute-options="minuteOptions" color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
+                  <q-time @input="() => $refs.qDateAppointment.hide()" :hour-options="hourOptions" :minute-options="minuteOptions" color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
                 </q-popup-proxy>
               </q-icon>
             </template>

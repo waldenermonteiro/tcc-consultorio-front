@@ -3,12 +3,12 @@
     <div class="row justify-center q-col-gutter-sm ">
       <div class="col-3">
         Data:
-        <q-input outlined v-model="formFilter.created_at" dense @click="$refs.qDateAppointment.show()">
+        <q-input outlined v-model="formFilter.created_at" dense @click="$refs.qCreatedAt.show()">
           <template v-slot:append>
             <q-icon v-if="formFilter.created_at" name="cancel" @click="clearInput('created_at')" class="cursor-pointer" />
             <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
-                <q-date color="primary" v-model="formFilter.created_at" mask="DD/MM/YYYY" />
+              <q-popup-proxy ref="qCreatedAt" transition-show="scale" transition-hide="scale">
+                <q-date @input="() => $refs.qCreatedAt.hide()" color="primary" v-model="formFilter.created_at" mask="DD/MM/YYYY" />
               </q-popup-proxy>
             </q-icon>
           </template>
