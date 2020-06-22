@@ -1,7 +1,16 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table title="Treats" :data="patients" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
+      <q-table
+        title="Treats"
+        :data="patients"
+        :columns="columns"
+        row-key="id"
+        :filter="filterAltered"
+        separator="cell"
+        :pagination.sync="pagination"
+        table-style="material striped"
+      >
         <template v-slot:top>
           <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
@@ -15,6 +24,11 @@
           <q-tr :props="props">
             <q-th v-for="col in props.cols" :key="col.name" :props="props" class="text-bold text-dark bg-grey-3">{{ col.label }}</q-th>
           </q-tr>
+        </template>
+        <template v-slot:body-cell-cpf="props">
+          <q-td key="cpf" :props="props">
+            {{ $formatCPFCNPJ(props.row.cpf, "cpf") }}
+          </q-td>
         </template>
         <template v-slot:body-cell-birth_date="props">
           <q-td key="birth_date" :props="props">
@@ -48,9 +62,15 @@ export default {
   data () {
     return {
       filter: '',
+      filterAltered: '',
       pagination: {
         rowsPerPage: 10
       }
+    }
+  },
+  watch: {
+    filter: function () {
+      this.filterAltered = this.filter.replace(/[^0-9]+/g, '')
     }
   },
   computed: {
