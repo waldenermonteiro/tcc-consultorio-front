@@ -1,22 +1,11 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table
-        title="Treats"
-        :data="employees"
-        :columns="columns"
-        row-key="id"
-        :filter="filter"
-        separator="cell"
-        :pagination.sync="pagination"
-        table-style="material striped"
-      >
+      <div class="row justify-center">
+        <employees-filter class="col-12"></employees-filter>
+      </div>
+      <q-table title="Treats" :data="employees" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
-          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
           <q-space />
           <q-btn size="sm" icon="add" color="primary" label="Novo Funcionário" @click="createEmployee()" />
         </template>
@@ -55,9 +44,11 @@
 <script>
 import { mapState } from 'vuex'
 import Create from './Create.vue'
+import EmployeesFilter from './components/ListFilter'
 export default {
   components: {
-    'employees-create': Create
+    'employees-create': Create,
+    'employees-filter': EmployeesFilter
   },
   data () {
     return {
@@ -71,7 +62,6 @@ export default {
     ...mapState('Employees', ['employees', 'columns'])
   },
   mounted () {
-    this.$list({ urlDispatch: 'Employees/list' })
   },
   methods: {
     createEmployee () {

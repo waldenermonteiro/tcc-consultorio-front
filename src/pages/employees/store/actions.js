@@ -1,8 +1,8 @@
 import EmployeesService from '../services/EmployeesService'
 /* eslint-disable no-useless-catch */
-export async function list ({ commit }) {
+export async function list ({ commit }, params) {
   try {
-    const { data } = await EmployeesService.list()
+    const { data } = await EmployeesService.list(params)
     commit('LIST', data)
   } catch (error) {
     throw error
