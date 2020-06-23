@@ -72,7 +72,6 @@ export default {
   mounted () {
     this.$list({ urlDispatch: 'Specialities/list' })
     this.$list({ urlDispatch: 'Profiles/list' })
-    this.$list({ urlDispatch: 'Employees/list' })
   },
   methods: {
     filterEmployee (val, update, abort) {

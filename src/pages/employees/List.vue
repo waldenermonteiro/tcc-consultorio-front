@@ -62,6 +62,7 @@ export default {
     ...mapState('Employees', ['employees', 'columns'])
   },
   mounted () {
+    this.$list({ urlDispatch: 'Employees/list' })
   },
   methods: {
     createEmployee () {
