@@ -34,7 +34,7 @@
             dense
             debounce="300"
             color="primary"
-            error-message="Nome é obrigatório"
+            error-message="Email é obrigatório"
             @input="$v.form.email.$touch"
           ></q-input>
         </div>
