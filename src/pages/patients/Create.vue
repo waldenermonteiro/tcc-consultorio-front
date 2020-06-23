@@ -13,7 +13,7 @@
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
-            maxlength="30"
+            maxlength="100"
             outlined
             dense
             debounce="300"
@@ -91,6 +91,7 @@
             color="primary"
             error-message="Cep é obrigatório"
             @keyup.enter="searchCep(form.cep)"
+            @blur="searchCep(form.cep)"
             @input="$v.form.cep.$touch"
           ></q-input>
         </div>
@@ -260,7 +261,6 @@ export default {
     openModal () {
       this.resetForm()
       this.showModal = true
-      this.form.birth_date = this.$formatDateBr('2020-05-01')
       this.$v.form.$reset()
     },
     openModalEdit (form) {
@@ -306,7 +306,9 @@ export default {
       const patientPrepared = {
         ...form,
         cpf: this.$formatReplaceCpfCnpj(form.cpf),
-        birth_date: this.$formatDateBrInApi(form.birth_date)
+        cep: this.$formatReplaceCep(form.cep),
+        birth_date: this.$formatDateBrInApi(form.birth_date),
+        profile_id: 51
       }
       delete form.user
       return patientPrepared
@@ -323,7 +325,9 @@ export default {
           this.$list({
             urlDispatch: 'Patients/list'
           })
-          this.executeFunctionCallback()
+          if (typeof this.executeFunctionCallback !== 'string') {
+            this.executeFunctionCallback()
+          }
         }
       })
     }
