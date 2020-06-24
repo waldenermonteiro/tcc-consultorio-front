@@ -73,11 +73,11 @@ export default {
   mounted () {
     this.$list({ urlDispatch: 'RequestExams/list', params: this.formFilter })
     this.$refs.ResultExamFilter.setForm(this.formFilter)
-    // this.$list({ urlDispatch: 'RequestExams/list', params: { status: 'Agendado' } })
   },
   methods: {
     setResultExam (row) {
       this.$refs.ModalCreateResultExam.openModal(JSON.parse(JSON.stringify({ ...row, created_at: this.setHoursDate(new Date(row.created_at), 3) })))
+      this.$refs.ModalCreateResultExam.setForm(this.formFilter)
     },
     setHoursDate (date, h) {
       date.setTime(date.getTime() + h * 60 * 60 * 1000)

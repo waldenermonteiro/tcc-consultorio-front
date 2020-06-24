@@ -36,13 +36,19 @@ export default {
   data () {
     return {
       showModal: false,
-      exam: {}
+      exam: {},
+      formFilter: {
+        status: ''
+      }
     }
   },
   methods: {
     openModal (row) {
       this.showModal = true
       this.exam = { ...row }
+    },
+    setForm (form) {
+      this.formFilter = { ...form }
     },
     prepareResultExam (form) {
       this.verifyValidations()
@@ -52,15 +58,16 @@ export default {
     save () {
       const resultExam = this.prepareResultExam(this.form)
       this.$setDialogQuestion({
-        title: 'Concluir Consulta',
-        message: 'Tem certeza que deseja concluir a consulta ?',
+        title: 'Concluir Emissão de Resultado de Exame',
+        message: 'Tem certeza que deseja concluir a emissão ?',
         callback: () => {
           this.$createOrUpdate({
             urlDispatch: 'ResultExams/create',
             params: resultExam,
             messages: 'Resultado de exame emitido com sucesso',
             callback: () => {
-              this.$list({ urlDispatch: 'RequestExams/list' })
+              this.showModal = false
+              this.$list({ urlDispatch: 'RequestExams/list', params: this.formFilter })
             }
           })
         }
