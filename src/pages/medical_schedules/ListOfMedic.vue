@@ -12,11 +12,6 @@
         table-style="material striped"
       >
         <template v-slot:top>
-          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
           <q-space />
         </template>
         <template v-slot:header="props">
