@@ -1,4 +1,4 @@
-import { required, requiredIf } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -14,9 +14,7 @@ export default {
         city: '',
         state: '',
         sex: '',
-        email: '',
-        password: '',
-        profile_id: 2
+        email: ''
       },
       formCopy: this.form
     }
@@ -67,14 +65,6 @@ export default {
       },
       email: {
         required
-      },
-      password: {
-        required: requiredIf(function () {
-          if (this.form.id) {
-            return false
-          }
-          return true
-        })
       }
     }
   }
