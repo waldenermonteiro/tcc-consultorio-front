@@ -1,25 +1,13 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table
-        dense
-        title="Treats"
-        :data="employees"
-        :columns="columns"
-        row-key="id"
-        :filter="filter"
-        separator="cell"
-        :pagination.sync="pagination"
-        table-style="material striped"
-      >
+      <div class="row justify-center">
+        <employees-filter class="col-12"></employees-filter>
+      </div>
+      <q-table title="Treats" :data="employees" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
-          <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo Funcionário" @click="createEmployee()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo Funcionário" @click="createEmployee()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -43,9 +31,9 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn size="xs" dense color="positive" :title="'Visualizar funcionário ' + props.row.name" icon="search" class="q-mr-sm" @click="viewEmployee(props.row)"></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar funcionário ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateEmployee(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir funcionário ' + props.row.name" icon="delete" @click="removeEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="positive" :title="'Visualizar funcionário ' + props.row.name" icon="search" class="q-mr-sm" @click="viewEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar funcionário ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateEmployee(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir funcionário ' + props.row.name" icon="delete" @click="removeEmployee(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
@@ -56,9 +44,11 @@
 <script>
 import { mapState } from 'vuex'
 import Create from './Create.vue'
+import EmployeesFilter from './components/ListFilter'
 export default {
   components: {
-    'employees-create': Create
+    'employees-create': Create,
+    'employees-filter': EmployeesFilter
   },
   data () {
     return {

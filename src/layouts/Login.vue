@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="img-background" style="border: solid 1px black">
+  <q-layout view="lHh Lpr lFf">
     <q-page-container class="container-fluid">
       <router-view />
     </q-page-container>
@@ -23,19 +23,10 @@ export default {
 ::-webkit-scrollbar {
   display: none;
 }
-.img-background {
-  background: #568fa9;
-  /* Full height */
-  height: 100%;
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .dark {
   /* color: #fff !important; */
-  background: #47474736;
+  /* background: #47474736; */
+    background: #96969636;
   /* opacity: 0.3; */
 }
 </style>

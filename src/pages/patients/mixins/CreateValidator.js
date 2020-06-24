@@ -1,29 +1,26 @@
-import { required, requiredIf } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
       form: {
-        name: 'Waldener Junior',
+        name: '',
         birth_date: '',
-        rg: '6134560',
-        cpf: '03214569871',
+        rg: '',
+        cpf: '',
         cep: '',
         address: '',
         complement: '',
         district: '',
         city: '',
         state: '',
-        sex: 'Masculino',
-        email: 'waldener@gmail.com',
-        password: '123',
-        profile_id: 2
+        sex: '',
+        email: ''
       },
       formCopy: this.form
     }
   },
   methods: {
     verifiyValidations () {
-      console.log(this)
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         this.$setNotifyWarning('Existem campos inválidos')
@@ -68,14 +65,6 @@ export default {
       },
       email: {
         required
-      },
-      password: {
-        required: requiredIf(function () {
-          if (this.form.id) {
-            return false
-          }
-          return true
-        })
       }
     }
   }

@@ -13,7 +13,7 @@
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
-            maxlength="30"
+            maxlength="100"
             outlined
             dense
             debounce="300"
@@ -91,6 +91,7 @@
             color="primary"
             error-message="Cep é obrigatório"
             @keyup.enter="searchCep(form.cep)"
+            @blur="searchCep(form.cep)"
             @input="$v.form.cep.$touch"
           ></q-input>
         </div>
@@ -206,7 +207,7 @@
             @input="$v.form.email.$touch"
           ></q-input>
         </div>
-        <div class="col-3" v-if="!isEdit && !isView">
+        <!-- <div class="col-3" v-if="!isEdit && !isView">
           Senha*:
           <q-input
             bottom-slots
@@ -220,7 +221,7 @@
             error-message="Senha é obrigatório"
             @input="$v.form.password.$touch"
           ></q-input>
-        </div>
+        </div> -->
       </q-card-section>
       <q-separator />
 
@@ -242,8 +243,8 @@ export default {
   mixins: [CreateValidator],
   data () {
     return {
+      // showUpdatePassword: false,
       showModal: false,
-      showUpdatePassword: false,
       isEdit: false,
       isView: false,
       medicalSchedule: {},
@@ -260,14 +261,13 @@ export default {
     openModal () {
       this.resetForm()
       this.showModal = true
-      this.form.birth_date = this.$formatDateBr('2020-05-01')
       this.$v.form.$reset()
     },
     openModalEdit (form) {
       this.openModal()
       this.isEdit = true
       this.form = { ...form, email: form.user.email, birth_date: this.$formatDateBr(form.birth_date) }
-      delete this.form.password
+      // delete this.form.password
     },
     openModalView (form) {
       this.openModal()
@@ -306,6 +306,7 @@ export default {
       const patientPrepared = {
         ...form,
         cpf: this.$formatReplaceCpfCnpj(form.cpf),
+        cep: this.$formatReplaceCep(form.cep),
         birth_date: this.$formatDateBrInApi(form.birth_date)
       }
       delete form.user
@@ -323,7 +324,9 @@ export default {
           this.$list({
             urlDispatch: 'Patients/list'
           })
-          this.executeFunctionCallback()
+          if (typeof this.executeFunctionCallback !== 'string') {
+            this.executeFunctionCallback()
+          }
         }
       })
     }

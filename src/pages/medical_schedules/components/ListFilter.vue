@@ -1,13 +1,31 @@
 <template>
   <div class="q-pa-sm">
     <div class="row justify-center q-col-gutter-sm ">
-      <div class="col-3">
-        Médico:
-        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
-          <template v-if="formFilter.employee_id" v-slot:append>
-            <q-icon name="cancel" @click.stop="clearInput('employee_id')" class="cursor-pointer" />
+      <div class="col-3" v-if="!hideCreatedAt">
+        Data:
+        <q-input outlined v-model="formFilter.created_at" dense @click="$refs.qCreatedAt.show()">
+          <template v-slot:append>
+            <q-icon v-if="formFilter.created_at" name="cancel" @click="clearInput('created_at')" class="cursor-pointer" />
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy ref="qCreatedAt" transition-show="scale" transition-hide="scale">
+                <q-date @input="() => $refs.qCreatedAt.hide()" color="primary" v-model="formFilter.created_at" mask="DD/MM/YYYY" />
+              </q-popup-proxy>
+            </q-icon>
           </template>
-        </q-select>
+        </q-input>
+      </div>
+      <div class="col-3" v-if="!hideDate">
+        Data:
+        <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
+          <template v-slot:append>
+            <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
+                <q-date @input="() => $refs.qDateAppointment.hide()" color="primary" v-model="formFilter.date_appointment" mask="DD/MM/YYYY" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
       </div>
       <div class="col-3" v-if="!hidePatient">
         Paciente:
@@ -29,18 +47,13 @@
           </template>
         </q-select>
       </div>
-      <div class="col-3">
-        Data:
-        <q-input outlined v-model="formFilter.date_appointment" dense @click="$refs.qDateAppointment.show()">
-          <template v-slot:append>
-            <q-icon v-if="formFilter.date_appointment" name="cancel" @click="clearInput('date_appointment')" class="cursor-pointer" />
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
-                <q-date color="primary" v-model="formFilter.date_appointment" mask="DD/MM/YYYY" />
-              </q-popup-proxy>
-            </q-icon>
+      <div class="col-3" v-if="!hideMedic">
+        Médico:
+        <q-select outlined v-model="formFilter.employee_id" option-value="id" option-label="name" :options="employees" dense emit-value map-options>
+          <template v-if="formFilter.employee_id" v-slot:append>
+            <q-icon name="cancel" @click.stop="clearInput('employee_id')" class="cursor-pointer" />
           </template>
-        </q-input>
+        </q-select>
       </div>
       <div class="col-3" v-if="!hideStatus">
         Status:
@@ -74,11 +87,27 @@ export default {
     hideStatus: {
       required: false,
       default: false
+    },
+    hideCreatedAt: {
+      required: false,
+      default: false
+    },
+    hideDate: {
+      required: false,
+      default: false
+    },
+    hideMedic: {
+      required: false,
+      default: false
+    },
+    action: {
+      required: false
     }
   },
   data () {
     return {
       formFilter: {
+        created_at: '',
         employee_id: '',
         patient_id: '',
         date_appointment: '',
@@ -115,20 +144,16 @@ export default {
     prepareParams (form) {
       const formCustom = { ...form }
       formCustom.date_appointment = this.$formatDateBrInApi(this.formFilter.date_appointment)
+      formCustom.created_at = this.$formatDateBrInApi(this.formFilter.created_at)
       return formCustom
     },
     send () {
       const params = this.prepareParams(this.formFilter)
-      this.$list({ urlDispatch: 'MedicalSchedules/list', params })
+      this.$list({ urlDispatch: this.action, params })
     },
     clearForm () {
-      this.formFilter = { ...this.formFilterCopy }
-      this.$list({
-        urlDispatch: 'MedicalSchedules/list',
-        callback: () => {
-          this.optionsPatients = this.patients
-        }
-      })
+      this.formFilter = this.hideMedic ? { ...this.formFilterCopy, employee_id: this.formFilter.employee_id } : { ...this.formFilterCopy }
+      this.send()
     },
     clearInput (prop) {
       this.formFilter[prop] = ''

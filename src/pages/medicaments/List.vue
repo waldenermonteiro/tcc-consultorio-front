@@ -2,7 +2,6 @@
   <q-page>
     <div class="q-pa-md">
       <q-table
-        dense
         title="Treats"
         :data="medicaments"
         :columns="columns"
@@ -19,7 +18,7 @@
             </template>
           </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo medicamento" @click="createMedicament()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo medicamento" @click="createMedicament()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -28,9 +27,9 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn size="xs" dense color="positive" :title="'Visualizar perfil ' + props.row.name" icon="search" class="q-mr-sm" @click="viewMedicament(props.row)"></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar medicamento ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateMedicament(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir medicamento ' + props.row.name" icon="delete" @click="removeMedicament(props.row)"></q-btn>
+            <q-btn size="sm" dense color="positive" :title="'Visualizar perfil ' + props.row.name" icon="search" class="q-mr-sm" @click="viewMedicament(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar medicamento ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateMedicament(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir medicamento ' + props.row.name" icon="delete" @click="removeMedicament(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>

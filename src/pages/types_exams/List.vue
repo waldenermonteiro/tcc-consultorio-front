@@ -1,17 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table
-        dense
-        title="Treats"
-        :data="typesExams"
-        :columns="columns"
-        row-key="id"
-        :filter="filter"
-        separator="cell"
-        :pagination.sync="pagination"
-        table-style="material striped"
-      >
+      <q-table title="Treats" :data="typesExams" :columns="columns" row-key="id" :filter="filter" separator="cell" :pagination.sync="pagination" table-style="material striped">
         <template v-slot:top>
           <q-input outlined dense label="Pesquisar" debounce="300" color="primary" v-model="filter">
             <template v-slot:append>
@@ -19,7 +9,7 @@
             </template>
           </q-input>
           <q-space />
-          <q-btn dense size="sm" icon="add" color="primary" label="Novo Tipo de Exame" @click="createTypeExam()" />
+          <q-btn size="sm" icon="add" color="primary" label="Novo Tipo de Exame" @click="createTypeExam()" />
         </template>
         <template v-slot:header="props">
           <q-tr :props="props">
@@ -29,7 +19,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
             <q-btn
-              size="xs"
+              size="sm"
               dense
               color="positive"
               :title="'Visualizar informações do tipo de exame ' + props.row.name"
@@ -37,8 +27,8 @@
               class="q-mr-sm"
               @click="viewTypeExam(props.row)"
             ></q-btn>
-            <q-btn size="xs" dense color="secondary" :title="'Editar tipo de exame ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateTypeExam(props.row)"></q-btn>
-            <q-btn size="xs" dense color="negative" :title="'Excluir tipo de exame ' + props.row.name" icon="delete" @click="removeTypeExam(props.row)"></q-btn>
+            <q-btn size="sm" dense color="secondary" :title="'Editar tipo de exame ' + props.row.name" icon="edit" class="q-mr-sm" @click="updateTypeExam(props.row)"></q-btn>
+            <q-btn size="sm" dense color="negative" :title="'Excluir tipo de exame ' + props.row.name" icon="delete" @click="removeTypeExam(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>

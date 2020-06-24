@@ -21,8 +21,8 @@
 
       <q-card-actions class="row">
         <div class="col-12 text-right">
-          <q-btn dense size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
-          <q-btn dense size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
+          <q-btn size="sm" icon="cancel" label="Cancelar" class="q-mr-sm" color="negative" @click="showModal = false"></q-btn>
+          <q-btn size="sm" icon-right="save" label="Salvar" @click="save()" color="primary"></q-btn>
         </div>
       </q-card-actions>
     </q-card>
@@ -36,13 +36,19 @@ export default {
   data () {
     return {
       showModal: false,
-      exam: {}
+      exam: {},
+      formFilter: {
+        status: ''
+      }
     }
   },
   methods: {
     openModal (row) {
       this.showModal = true
       this.exam = { ...row }
+    },
+    setForm (form) {
+      this.formFilter = { ...form }
     },
     prepareResultExam (form) {
       this.verifyValidations()
@@ -52,15 +58,16 @@ export default {
     save () {
       const resultExam = this.prepareResultExam(this.form)
       this.$setDialogQuestion({
-        title: 'Concluir Consulta',
-        message: 'Tem certeza que deseja concluir a consulta ?',
+        title: 'Concluir Emissão de Resultado de Exame',
+        message: 'Tem certeza que deseja concluir a emissão ?',
         callback: () => {
           this.$createOrUpdate({
             urlDispatch: 'ResultExams/create',
             params: resultExam,
             messages: 'Resultado de exame emitido com sucesso',
             callback: () => {
-              this.$list({ urlDispatch: 'RequestExams/list' })
+              this.showModal = false
+              this.$list({ urlDispatch: 'RequestExams/list', params: this.formFilter })
             }
           })
         }
