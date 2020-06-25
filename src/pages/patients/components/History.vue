@@ -83,7 +83,7 @@
                       :title="'Imprimir Resultado de Exame'"
                       icon="print"
                       class="q-mr-sm absolute-center"
-                      @click="printResultExam(props.row.result)"
+                      @click="printResultExam(props.row)"
                     ></q-btn>
                   </q-td>
                 </template>
@@ -105,7 +105,8 @@
 <script>
 import { mapState } from 'vuex'
 import ListFunctions from '../../medical_schedules/mixins/ListFunctions.mixin'
-import printDocument from '../Print'
+import printPrescriptionMedicament from '../Print'
+import printResultExam from '../../result_exams/Print'
 export default {
   mixins: [ListFunctions],
   data () {
@@ -147,10 +148,10 @@ export default {
       this.medicalSchedulesCopy = medicalSchedule.hasDiferent ? JSON.parse(JSON.stringify(this.medicalSchedulesCustom)) : JSON.parse(JSON.stringify(this.medicalSchedules))
     },
     printPrescriptionMedicament (medicalSchedule) {
-      printDocument(medicalSchedule)
+      printPrescriptionMedicament(medicalSchedule)
     },
-    printResultExam (result) {
-      console.log(result)
+    printResultExam (resultExam) {
+      printResultExam(resultExam)
     }
   }
 }

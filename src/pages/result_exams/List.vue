@@ -39,7 +39,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import printDocument from './Print'
+import printResultExam from './Print'
 import MedicalSchedulesFilter from '../medical_schedules/components/ListFilter'
 export default {
   components: {
@@ -63,8 +63,7 @@ export default {
   },
   methods: {
     printResultExam (resultExam) {
-      console.log(resultExam)
-      printDocument(resultExam)
+      printResultExam(resultExam)
     }
   }
 }

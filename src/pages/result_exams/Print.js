@@ -132,7 +132,7 @@ KGg0jwAzUfEbovQ7dc3tNRJDHDEXYu/pc75H39ANms5P9LnYEKwAcKsoTwwK9hgfENZzge8BcQvg
 wFcBWOjfh9jIx7aSaTkSRzZL8Axpt+CeKIeegsfOiE40sLgDSLEIZq0xECScTQEOI2TJkyRf/8/V
 Bc26cXrg7E59oF0gq6FiHNFORjxlEQBXmdhIK/EbogZA6JJOPOQdqbEPd6HBt1MuM3q10xEoG4tL
 QLQVw0WJxNiCemOuN4KfPlOcH0+B/yvrkcfhgx4v8Bnw0LEw4tQcEAAAAASUVORK5CYII=`
-const printDocument = resultExam => {
+const printResultExam = resultExam => {
   const medic = convertToString(resultExam.medicalSchedule.employee.name)
   const patient = convertToString(resultExam.medicalSchedule.patient.name)
   const resultExamDate = formatDateBr(resultExam.created_at)
@@ -286,4 +286,4 @@ const convertToString = string => {
     .replace('"', '')
     .replace('"', '')
 }
-export default printDocument
+export default printResultExam
