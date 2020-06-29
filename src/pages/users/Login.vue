@@ -5,7 +5,7 @@
         <img src="statics/logo-clinic.png" width="210em" />
       </div>
       <div class="q-mt-xl">
-        <q-input v-model="userData.email" outlined debounce="300" color="primary" type="text" label="Login" />
+        <q-input v-model="userData.email" outlined debounce="300" color="primary" type="text" label="E-mail" />
       </div>
       <div class="q-mt-md">
         <q-input
