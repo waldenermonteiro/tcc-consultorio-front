@@ -157,7 +157,7 @@ const printResultExam = resultExam => {
               alignment: 'center'
             }
           ],
-          margin: [250, 5, 0, 5]
+          margin: [260, 5, 0, 5]
         },
         {
           canvas: [{ type: 'line', x1: 0, y1: 0, x2: 1000, y2: 0, lineWidth: 2 }]
