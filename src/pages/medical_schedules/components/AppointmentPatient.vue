@@ -112,8 +112,6 @@
       </q-card-section>
       <q-card-actions class="row">
         <div class="col-8 text-subtitle2">
-          <q-icon size="md" name="access_time"></q-icon>Tempo da consulta: {{ `${hour}${minute}${second}` }}
-          <q-btn size="sm" label="Parar" icon="stop" @click="stopConsult()" color="negative"></q-btn>
         </div>
         <div class="col-4 text-right">
           <q-btn size="sm" icon="check" label="Finalizar Consulta" @click="save()" color="primary"></q-btn>
@@ -135,10 +133,6 @@ export default {
   mixins: [CreateConsultValidor],
   data () {
     return {
-      time: 0,
-      hour: '',
-      minute: '',
-      second: '',
       listFilter: '',
       tab: 'receit'
     }
@@ -155,7 +149,6 @@ export default {
   methods: {
     openModal (medicalSchedule, listFilter) {
       this.medicalSchedule = { ...medicalSchedule }
-      // this.startConsult()
       this.showModal = true
       this.listFilter = listFilter
       this.resetForm()
@@ -172,33 +165,6 @@ export default {
     },
     historyPatient (medicalSchedule) {
       this.$refs.modalHistoryPatient.openModal({ ...medicalSchedule, hasDiferent: true })
-    },
-    startConsult () {
-      let s = 1
-      let m = 0
-      let h = 0
-      const self = this
-      self.time = setInterval(function () {
-        if (s === 60) {
-          m++
-          s = 0
-        }
-        if (m === 60) {
-          h++
-          s = 0
-          m = 0
-        }
-        if (h < 10) self.hour = '0' + h + ':'
-        else self.hour = h + ':'
-        if (s < 10) self.second = '0' + s + ''
-        else self.second = s
-        if (m < 10) self.minute = '0' + m + ':'
-        else self.minute = m + ':'
-        s++
-      }, 1000)
-    },
-    stopConsult () {
-      clearInterval(this.time)
     },
     filterMedicament (val, update, abort) {
       update(() => {

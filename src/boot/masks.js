@@ -66,6 +66,12 @@ const formatDateAndHourBr = date => {
   const getDate = pattern.exec(date)[0]
   return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
 }
+const formatDateAndHourBrEmptyT = date => {
+  if (date === null || date === '' || date === undefined) return ''
+  const pattern = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/g
+  const getDate = pattern.exec(date)[0]
+  return getDate.replace(pattern, '$3/$2/$1 $4:$5:$6')
+}
 const formatDateBrInApi = date => {
   if (date === null) return ''
   const pattern = /(\d{2})\/(\d{2})\/(\d{4})/g
@@ -123,6 +129,7 @@ export {
   formatDate,
   formatDateBr,
   formatDateAndHourBr,
+  formatDateAndHourBrEmptyT,
   formatDateBrInApi,
   formatCurrencyBrazil,
   formatDateApi,

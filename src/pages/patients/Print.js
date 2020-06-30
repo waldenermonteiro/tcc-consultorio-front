@@ -132,7 +132,7 @@ KGg0jwAzUfEbovQ7dc3tNRJDHDEXYu/pc75H39ANms5P9LnYEKwAcKsoTwwK9hgfENZzge8BcQvg
 wFcBWOjfh9jIx7aSaTkSRzZL8Axpt+CeKIeegsfOiE40sLgDSLEIZq0xECScTQEOI2TJkyRf/8/V
 Bc26cXrg7E59oF0gq6FiHNFORjxlEQBXmdhIK/EbogZA6JJOPOQdqbEPd6HBt1MuM3q10xEoG4tL
 QLQVw0WJxNiCemOuN4KfPlOcH0+B/yvrkcfhgx4v8Bnw0LEw4tQcEAAAAASUVORK5CYII=`
-const printDocument = consult => {
+const printPrescriptionMedicament = consult => {
   const medic = convertToString(consult.employee.name)
   const patient = convertToString(consult.patient.name)
   const observation = convertToString(consult.observation)
@@ -156,7 +156,7 @@ const printDocument = consult => {
               alignment: 'center'
             }
           ],
-          margin: [250, 5, 0, 5]
+          margin: [260, 5, 0, 5]
         },
         {
           canvas: [{ type: 'line', x1: 0, y1: 0, x2: 1000, y2: 0, lineWidth: 2 }]
@@ -298,4 +298,4 @@ const convertToString = string => {
     .replace('"', '')
     .replace('"', '')
 }
-export default printDocument
+export default printPrescriptionMedicament

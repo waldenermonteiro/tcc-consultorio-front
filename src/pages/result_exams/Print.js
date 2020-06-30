@@ -1,5 +1,6 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import { formatDateBr, formatDateAndHourBrEmptyT } from '../../boot/masks'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const image = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAABjCAYAAAB5XvlIAAAAAXNSR0
 IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABxxSURBVHhe7V0JmB
@@ -131,8 +132,18 @@ KGg0jwAzUfEbovQ7dc3tNRJDHDEXYu/pc75H39ANms5P9LnYEKwAcKsoTwwK9hgfENZzge8BcQvg
 wFcBWOjfh9jIx7aSaTkSRzZL8Axpt+CeKIeegsfOiE40sLgDSLEIZq0xECScTQEOI2TJkyRf/8/V
 Bc26cXrg7E59oF0gq6FiHNFORjxlEQBXmdhIK/EbogZA6JJOPOQdqbEPd6HBt1MuM3q10xEoG4tL
 QLQVw0WJxNiCemOuN4KfPlOcH0+B/yvrkcfhgx4v8Bnw0LEw4tQcEAAAAASUVORK5CYII=`
-const printDocument = content => {
+const printResultExam = resultExam => {
+  const medic = convertToString(resultExam.medicalSchedule.employee.name)
+  const patient = convertToString(resultExam.medicalSchedule.patient.name)
+  const resultExamDate = formatDateBr(resultExam.created_at)
+  const result = resultExam.result.observation
+  const consultDateAndHour = formatDateAndHourBrEmptyT(resultExam.created_at)
+  const requestExam = resultExam.requestExam
+  const typeExam = requestExam.typeExam
   const docDefinition = {
+    info: {
+      title: resultExamDate + '_' + typeExam.name + '_' + patient
+    },
     pageMargins: [0, 70, 0, 60],
 
     header: function (currentPage, pageCount, pageSize) {
@@ -141,18 +152,12 @@ const printDocument = content => {
           columns: [
             {
               image: image,
-              width: 70,
-              height: 45
-            },
-            {
-              text: 'Clínica do Arquiteto Juninho',
-              alignment: 'center',
-              width: '75%',
-              bold: true,
-              fontSize: 20
+              width: 80,
+              height: 55,
+              alignment: 'center'
             }
           ],
-          margin: [0, 5, 0, 5]
+          margin: [260, 5, 0, 5]
         },
         {
           canvas: [{ type: 'line', x1: 0, y1: 0, x2: 1000, y2: 0, lineWidth: 2 }]
@@ -163,12 +168,14 @@ const printDocument = content => {
       {
         columns: [
           {
-            text: 'CNPJ: 00.776.574/0006-60 ',
-            width: '63%'
+            text: 'CNPJ: 99.999.999/9999-99 ',
+            width: '70%',
+            fontSize: 10
           },
           {
-            text: 'FONE: (91) 99999-9999/ 3777-0777 ',
-            width: '37%'
+            text: 'FONE: (91) 99999-9999/ 3333-3333 ',
+            width: '30%',
+            fontSize: 10
           }
         ],
         margin: [10, 0, 10, 0]
@@ -176,21 +183,23 @@ const printDocument = content => {
       {
         columns: [
           {
-            text: 'RUAS DOS AFOGADOS - 222 - 66845111  ',
-            width: '63%'
+            text: 'RUAS DOS AFOGADOS - 222 - 99999999  ',
+            width: '70%',
+            fontSize: 10
           },
           {
             text: 'CENTRO - ABETETUBA  - PARÁ',
-            width: '37%'
+            width: '30%',
+            fontSize: 10
           }
         ],
-        margin: [10, 0, 10, 10]
+        margin: [10, 0, 10, 5]
       },
       { canvas: [{ type: 'line', x1: 0, y1: 0, x2: 1000, y2: 0, lineWidth: 2 }] },
       {
         columns: [
           {
-            text: 'RECEITUÁRIO/PLANTÃO',
+            text: 'Resultado Exame: ' + typeExam.name,
             alignment: 'center',
             width: '100%',
             bold: true,
@@ -208,16 +217,9 @@ const printDocument = content => {
         {
           columns: [
             {
-              text: 'Data: ____/____/____',
-              alignment: 'left',
-              width: '40%',
-              bold: true,
-              fontSize: 15
-            },
-            {
               text: 'Profissional: ___________________________________',
               alignment: 'center',
-              width: '60%',
+              width: '100%',
               bold: true,
               fontSize: 15
             }
@@ -227,7 +229,61 @@ const printDocument = content => {
       ]
     }
   }
-  docDefinition.content.push({ text: content, margin: [30, 10, 30, 10] })
-  pdfMake.createPdf(docDefinition).open()
+  const informationsOfConsult = [
+    {
+      text1: 'Médico:',
+      width1: '9%',
+      text2: medic,
+      width2: '90%',
+      margin: [50, 10, 10, 0]
+    },
+    {
+      text1: 'Paciente:',
+      width1: '10%',
+      text2: patient,
+      width2: '90%',
+      margin: [50, 0, 10, 0]
+    },
+    {
+      text1: 'Data e hora do resultado:',
+      width1: '26%',
+      text2: consultDateAndHour,
+      width2: '71%',
+      margin: [50, 0, 10, 0]
+    },
+    {
+      text1: 'Resultado:',
+      width1: '11%',
+      text2: result || '',
+      width2: '75%',
+      margin: [50, 50, 10, 10]
+    }
+  ]
+  for (const row of informationsOfConsult) {
+    docDefinition.content.push({
+      columns: [
+        {
+          text: row.text1,
+          alignment: 'left',
+          width: row.width1,
+          bold: true,
+          fontSize: 12
+        },
+        {
+          text: row.text2,
+          alignment: 'left',
+          width: row.width2,
+          fontSize: 12
+        }
+      ],
+      margin: row.margin
+    })
+  }
+  pdfMake.createPdf(docDefinition).print()
 }
-export default printDocument
+const convertToString = string => {
+  return JSON.stringify(string)
+    .replace('"', '')
+    .replace('"', '')
+}
+export default printResultExam

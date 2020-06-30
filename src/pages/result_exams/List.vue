@@ -30,15 +30,7 @@
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td key="actions">
-            <q-btn
-              size="sm"
-              dense
-              color="grey"
-              :title="'Imprimir Resultado de Exame'"
-              icon="print"
-              class="q-mr-sm absolute-center"
-              @click="printResultExam(props.row.result)"
-            ></q-btn>
+            <q-btn size="sm" dense color="grey" :title="'Imprimir Resultado de Exame'" icon="print" class="q-mr-sm absolute-center" @click="printResultExam(props.row)"></q-btn>
           </q-td>
         </template>
       </q-table>
@@ -47,6 +39,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import printResultExam from './Print'
 import MedicalSchedulesFilter from '../medical_schedules/components/ListFilter'
 export default {
   components: {
@@ -69,7 +62,9 @@ export default {
     ...mapState('ResultExams', ['resultExams', 'columns'])
   },
   methods: {
-    printResultExam (medicalSchedule) {}
+    printResultExam (resultExam) {
+      printResultExam(resultExam)
+    }
   }
 }
 </script>

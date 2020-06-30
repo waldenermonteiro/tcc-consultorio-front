@@ -177,19 +177,21 @@
         </div>
         <div class="col-2">
           Sexo*:
-          <q-input
+          <q-select
             :readonly="isView"
-            bottom-slots
-            :error="$v.form.sex.$error"
-            v-model="form.sex"
-            maxlength="30"
             outlined
+            v-model="form.sex"
+            option-value="value"
+            option-label="label"
+            :options="optionsSex"
             dense
-            debounce="300"
-            color="primary"
+            emit-value
+            map-options
             error-message="Sexo é obrigatório"
+            :rules="[val => !!val]"
+            :error="$v.form.sex.$error"
             @input="$v.form.sex.$touch"
-          ></q-input>
+          />
         </div>
         <div class="col-4">
           Email*:
@@ -252,7 +254,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('Patients', ['resultCreate', 'optionsUfs', 'cepInformations'])
+    ...mapState('Patients', ['resultCreate', 'optionsSex', 'optionsUfs', 'cepInformations'])
   },
   methods: {
     optionsFn (data) {

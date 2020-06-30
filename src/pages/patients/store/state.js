@@ -14,6 +14,11 @@ export default function () {
       { name: 'sex', align: 'center', label: 'Sexo', field: 'sex', sortable: true },
       { name: 'actions', align: 'center', label: 'Ações', field: 'actions', sortable: true, headerStyle: 'width: 100px' }
     ],
+    optionsSex: [
+      { label: 'Masculino', value: 'Masculino' },
+      { label: 'Feminino', value: 'Feminino' },
+      { label: 'Não Binário', value: 'Não Binário' }
+    ],
     optionsUfs: [
       { label: 'AC', value: 'AC' },
       { label: 'AL', value: 'AL' },

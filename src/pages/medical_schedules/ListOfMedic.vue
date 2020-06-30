@@ -42,16 +42,6 @@
               @click="startConsult(props.row)"
             ></q-btn>
             <q-btn
-              v-if="verifyPrescriptionMedicamentIsEmpty(props.row.prescription_medicaments)"
-              size="sm"
-              dense
-              color="grey"
-              :title="'Imprimir Receita Médica ' + props.row.prescription_medicaments"
-              icon="print"
-              class="q-mr-sm"
-              @click="printPrescriptionMedicament(props.row, props.row.date_appointment)"
-            ></q-btn>
-            <q-btn
               v-if="verifyTypeMedicalSchedule(props.row.status, props.row.date_appointment)"
               size="sm"
               dense
@@ -71,7 +61,6 @@
 <script>
 import { mapState } from 'vuex'
 import AppointmentPatient from './components/AppointmentPatient'
-import printDocument from './Print'
 import ListFunctions from './mixins/ListFunctions.mixin'
 export default {
   mixins: [ListFunctions],
@@ -111,9 +100,6 @@ export default {
     },
     startConsult (row) {
       this.$refs.modalAppointmentPatient.openModal(row, this.listFilter)
-    },
-    printPrescriptionMedicament (row) {
-      printDocument(JSON.stringify(row))
     },
     canceledMedicalSchedule (row) {
       this.$setDialogQuestion({

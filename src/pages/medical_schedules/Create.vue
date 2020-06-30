@@ -53,7 +53,14 @@
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateAppointment" transition-show="scale" transition-hide="scale">
                   <q-date color="primary" v-model="form.date_appointment" :options="optionsFn" mask="DD/MM/YYYY HH:mm:ss" />
-                  <q-time @input="() => $refs.qDateAppointment.hide()" :hour-options="hourOptions" :minute-options="minuteOptions" color="primary" v-model="form.date_appointment" mask="DD/MM/YYYY HH:mm:ss" />
+                  <q-time
+                    @input="() => $refs.qDateAppointment.hide()"
+                    :hour-options="hourOptions"
+                    :minute-options="minuteOptions"
+                    color="primary"
+                    v-model="form.date_appointment"
+                    mask="DD/MM/YYYY HH:mm:ss"
+                  />
                 </q-popup-proxy>
               </q-icon>
             </template>
@@ -117,11 +124,7 @@ export default {
     ...mapState('Employees', ['employees']),
     ...mapState('Patients', ['patients'])
   },
-  mounted () {
-    this.$list({ urlDispatch: 'Employees/list' })
-    this.$list({ urlDispatch: 'Patients/list' })
-    this.optionsPatients = [...this.patients]
-  },
+  mounted () {},
   methods: {
     filterPatient (val, update, abort) {
       update(() => {
@@ -139,6 +142,13 @@ export default {
     },
     openModal () {
       this.resetForm()
+      this.$list({ urlDispatch: 'Employees/list' })
+      this.$list({
+        urlDispatch: 'Patients/list',
+        callback: () => {
+          this.optionsPatients = JSON.parse(JSON.stringify(this.patients))
+        }
+      })
       this.showModal = true
       this.$v.form.$reset()
     },
@@ -148,15 +158,16 @@ export default {
       this.form = { ...form, date_appointment: this.$formatDateAndHourBr(form.date_appointment) }
     },
     resetForm () {
-      this.optionsPatients = []
       this.isEdit = false
+      this.verifyNewPatient = false
       this.form = { ...this.formCopy, date_appointment: this.$formatDateAndHourBr(this.$formatDateAndHourApi(this.defaultDate)) }
     },
     verifyTypeAction () {
       return this.isEdit ? 'Editar' : 'Cadastrar'
     },
     prepareMedicalSchedule (form) {
-      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourBrInApi(form.date_appointment), status: 'Agendada' }
+      const patientId = this.verifyNewPatient ? null : this.form.patient_id
+      const medicalSchedulePrepared = { ...form, date_appointment: this.$formatDateAndHourBrInApi(form.date_appointment), status: 'Agendada', patient_id: patientId }
       delete form.patient
       delete form.employee
       return medicalSchedulePrepared
