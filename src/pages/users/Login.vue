@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       userData: {
-        email: 'teste@gmail.com',
-        password: '123'
+        email: '',
+        password: ''
       },
       loading: false
     }
