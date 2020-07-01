@@ -3,7 +3,6 @@ import axios from 'axios'
 
 Vue.prototype.$axios = axios
 const token = window.localStorage.getItem('token_clinic')
-console.log(token)
 const HTTPClient = axios.create({
   // baseURL: 'http://127.0.0.1:3333/api/v1/',
   baseURL: 'https://medic-life-api.herokuapp.com/api/v1/',

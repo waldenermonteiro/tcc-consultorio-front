@@ -2,7 +2,6 @@ import { Notify, Dialog } from 'quasar'
 export default {
   methods: {
     $setNotifyDanger (message) {
-      console.log(message)
       const uniqueMessage = message.message || message
       if (Array.isArray(message)) {
         this.setMultipleNotifyDanger(message)
