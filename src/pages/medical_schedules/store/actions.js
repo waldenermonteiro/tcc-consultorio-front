@@ -46,7 +46,8 @@ export async function remove ({ commit }, params) {
 }
 export async function finishConsult ({ commit }, params) {
   try {
-    await MedicalSchedulesService.finishConsult(params, params.id)
+    const { data } = await MedicalSchedulesService.finishConsult(params, params.id)
+    commit('SET_MEDICAL_SCHEDULE_FINISHED', data)
   } catch (error) {
     throw error
   }
