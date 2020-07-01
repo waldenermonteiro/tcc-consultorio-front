@@ -13,7 +13,7 @@
             bottom-slots
             :error="$v.form.name.$error"
             v-model="form.name"
-            maxlength="30"
+            maxlength="200"
             outlined
             dense
             debounce="300"
@@ -29,7 +29,7 @@
             bottom-slots
             :error="$v.form.factory.$error"
             v-model="form.factory"
-            maxlength="30"
+            maxlength="100"
             outlined
             dense
             debounce="300"
@@ -45,7 +45,7 @@
             bottom-slots
             :error="$v.form.manufacturer.$error"
             v-model="form.manufacturer"
-            maxlength="30"
+            maxlength="100"
             outlined
             dense
             debounce="300"
