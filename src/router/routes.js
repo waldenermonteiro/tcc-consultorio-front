@@ -14,7 +14,7 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('pages/Index.vue'),
-        meta: { roles: ['recepcionista', 'enfermeiro', 'medico', 'paciente', 'administrador'], acess: true, name: 'Dashboard', icons: 'home' }
+        meta: { roles: ['recepcionista', 'biomedico', 'medico', 'paciente', 'administrador'], acess: true, name: 'Dashboard', icons: 'home' }
       },
       {
         path: '/consultas',
@@ -58,23 +58,23 @@ const routes = [
         component: () => import('pages/patients/List.vue'),
         meta: { roles: ['administrador', 'recepcionista'], name: 'Pacientes  ', icons: 'fas fa-head-side-cough' }
       },
-      {
-        path: '/tiposExames',
-        name: 'Tipos de Exames',
-        component: () => import('pages/types_exams/List.vue'),
-        meta: { roles: ['administrador'], name: 'Tipos de Exames  ', icons: 'fas fa-microscope' }
-      },
+      // {
+      //   path: '/tiposExames',
+      //   name: 'Tipos de Exames',
+      //   component: () => import('pages/types_exams/List.vue'),
+      //   meta: { roles: ['administrador'], name: 'Tipos de Exames  ', icons: 'fas fa-microscope' }
+      // },
       {
         path: '/requisicoesExames',
         name: 'Requisições de Exames',
         component: () => import('pages/request_exams/List.vue'),
-        meta: { roles: ['administrador', 'enfermeiro'], name: 'Requisições de Exames  ', icons: 'fas fa-file-medical' }
+        meta: { roles: ['administrador', 'biomedico'], name: 'Requisições de Exames  ', icons: 'fas fa-file-medical' }
       },
       {
         path: '/resultadosExames',
         name: 'Resultados de Exames',
         component: () => import('pages/result_exams/List.vue'),
-        meta: { roles: ['administrador', 'enfermeiro'], name: 'Resultados de Exames  ', icons: 'fas fa-notes-medical' }
+        meta: { roles: ['administrador', 'biomedico'], name: 'Resultados de Exames  ', icons: 'fas fa-notes-medical' }
       }
     ]
   }

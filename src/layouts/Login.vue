@@ -12,9 +12,6 @@ export default {
       leftDrawerOpen: false,
       routes: this.$router.options.routes[0].children
     }
-  },
-  mounted () {
-    console.log(this.$router.options.routes[1])
   }
 }
 </script>
