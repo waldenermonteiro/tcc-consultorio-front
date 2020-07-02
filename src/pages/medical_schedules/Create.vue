@@ -122,7 +122,8 @@ export default {
   },
   computed: {
     ...mapState('Employees', ['employees']),
-    ...mapState('Patients', ['patients'])
+    ...mapState('Patients', ['patients']),
+    ...mapState('Profiles', ['profiles'])
   },
   mounted () {},
   methods: {
@@ -142,7 +143,13 @@ export default {
     },
     openModal () {
       this.resetForm()
-      this.$list({ urlDispatch: 'Employees/list' })
+      this.$list({
+        urlDispatch: 'Profiles/list',
+        callback: () => {
+          const profileMedic = this.profiles.filter(profile => profile.name.toLowerCase() === 'medico')[0]
+          this.$list({ urlDispatch: 'Employees/list', params: { profile_id: profileMedic.id } })
+        }
+      })
       this.$list({
         urlDispatch: 'Patients/list',
         callback: () => {
