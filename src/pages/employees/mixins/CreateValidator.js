@@ -14,7 +14,6 @@ export default {
   },
   methods: {
     verifiyValidations () {
-      console.log(this)
       this.$v.form.$touch()
       if (this.$v.form.$error) {
         this.$setNotifyWarning('Existem campos inválidos')

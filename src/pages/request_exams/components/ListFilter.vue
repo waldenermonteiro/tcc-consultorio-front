@@ -71,7 +71,6 @@ export default {
     prepareParams (form) {
       const formCustom = { ...form }
       formCustom.created_at = this.$formatDateAndHourApi(this.$formatDateBrInApi(this.formFilter.created_at))
-      console.log(formCustom.created_at)
       return formCustom
     },
     send () {

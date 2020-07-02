@@ -2,6 +2,7 @@ export default function () {
   return {
     medicalSchedules: [],
     medicalSchedulesCustom: [],
+    medicalSheduleFinished: {},
     optionsStatus: [
       { label: 'Agendada', value: 'Agendada' },
       { label: 'Finalizada', value: 'Finalizada' },

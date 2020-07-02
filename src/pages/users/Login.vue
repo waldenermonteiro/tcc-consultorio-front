@@ -5,10 +5,11 @@
         <img src="statics/logo-clinic.png" width="210em" />
       </div>
       <div class="q-mt-xl">
-        <q-input v-model="userData.email" outlined debounce="300" color="primary" type="text" label="E-mail" />
+        <q-input @keypress.enter="doLogin()" v-model="userData.email" outlined debounce="300" color="primary" type="text" label="E-mail" />
       </div>
       <div class="q-mt-md">
         <q-input
+          @keypress.enter="doLogin()"
           v-model="userData.password"
           outlined
           type="password"
@@ -37,8 +38,8 @@ export default {
   data () {
     return {
       userData: {
-        email: 'teste@gmail.com',
-        password: '123'
+        email: '',
+        password: ''
       },
       loading: false
     }

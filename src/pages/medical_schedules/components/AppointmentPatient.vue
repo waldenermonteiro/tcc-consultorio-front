@@ -111,8 +111,7 @@
         </div>
       </q-card-section>
       <q-card-actions class="row">
-        <div class="col-8 text-subtitle2">
-        </div>
+        <div class="col-8 text-subtitle2"></div>
         <div class="col-4 text-right">
           <q-btn size="sm" icon="check" label="Finalizar Consulta" @click="save()" color="primary"></q-btn>
         </div>
@@ -126,6 +125,7 @@
 import { mapState } from 'vuex'
 import CreateConsultValidor from '../mixins/CreateConsultValidator'
 import History from '../../patients/components/History'
+import printPrescriptionMedicament from '../../patients/Print'
 export default {
   components: {
     'patients-history': History
@@ -140,7 +140,8 @@ export default {
   computed: {
     ...mapState('Employees', ['employees']),
     ...mapState('TypesExams', ['typesExams']),
-    ...mapState('Medicaments', ['medicaments'])
+    ...mapState('Medicaments', ['medicaments']),
+    ...mapState('MedicalSchedules', ['medicalSheduleFinished'])
   },
   mounted () {
     this.$list({ urlDispatch: 'Medicaments/list' })
@@ -217,9 +218,21 @@ export default {
             messages: 'Consulta finalizada  com sucesso',
             callback: () => {
               this.closeModal()
+              if (this.form.medicalSchedule.prescription_medicaments.medicaments.length !== 0) {
+                this.printReceit()
+              }
               this.listFilter()
             }
           })
+        }
+      })
+    },
+    printReceit () {
+      this.$setDialogQuestion({
+        title: 'Imprimir Receita',
+        message: 'Deseja Imprimir a receita? ?',
+        callback: () => {
+          printPrescriptionMedicament(this.medicalSheduleFinished)
         }
       })
     }
