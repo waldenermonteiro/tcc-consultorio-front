@@ -122,7 +122,6 @@ export default {
       urlDispatch: 'Profiles/list',
       callback: () => {
         const profileMedic = this.profiles.filter(profile => profile.name.toLowerCase() === 'medico')[0]
-        console.log(profileMedic)
         this.$list({ urlDispatch: 'Employees/list', params: { profile_id: profileMedic.id } })
       }
     })
