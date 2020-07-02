@@ -118,13 +118,21 @@ export default {
     }
   },
   mounted () {
-    this.$list({ urlDispatch: 'Employees/list' })
+    this.$list({
+      urlDispatch: 'Profiles/list',
+      callback: () => {
+        const profileMedic = this.profiles.filter(profile => profile.name.toLowerCase() === 'medico')[0]
+        console.log(profileMedic)
+        this.$list({ urlDispatch: 'Employees/list', params: { profile_id: profileMedic.id } })
+      }
+    })
     if (!this.hidePatient) this.$list({ urlDispatch: 'Patients/list' })
   },
   computed: {
     ...mapState('MedicalSchedules', ['optionsStatus']),
     ...mapState('Employees', ['employees']),
-    ...mapState('Patients', ['patients'])
+    ...mapState('Patients', ['patients']),
+    ...mapState('Profiles', ['profiles'])
   },
   methods: {
     setForm (form) {
